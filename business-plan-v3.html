@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cache Cache Killer — Business Plan V3</title>
+  <style>
+    /* ============================================
+       DESIGN TOKENS — Palette V3 "Cirque Delave"
+       ============================================ */
+    :root {
+      --fond: #0d0d12;
+      --fond-chaud: #1a1610;
+      --rouge: #c43030;
+      --bleu-acier: #3a6080;
+      --laiton: #b89040;
+      --violet: #6a3a7a;
+      --creme: #d8ccb4;
+      --creme-chaud: #e8dcc0;
+      --bordeaux: #7a2830;
+      --gris: #6a6a70;
+      --surface: #16161e;
+      --surface-raised: #1e1e28;
+      --border: #2a2a35;
+    }
+
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+      background: var(--fond);
+      color: var(--creme);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    h1, h2, h3 {
+      font-family: 'Oswald', 'Bebas Neue', system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+    }
+
+    .display {
+      font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+      font-weight: 900;
+    }
+
+    .mono {
+      font-family: 'Share Tech Mono', 'Fira Code', monospace;
+    }
+
+    .serif-quote {
+      font-family: 'Crimson Text', Georgia, serif;
+      font-style: italic;
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child { border-bottom: none; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; }
+
+    /* ============================================
+       COVER PAGE
+       ============================================ */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--fond-chaud);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--laiton);
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(184,144,64,0.08) 0%, transparent 60%);
+    }
+
+    .cover-logo {
+      font-size: 80px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: var(--laiton);
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .cover-killer {
+      font-size: 96px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.2em;
+      color: var(--rouge);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .cover-subtitle {
+      font-size: 24px;
+      color: var(--creme-chaud);
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+
+    .cover-tagline {
+      font-size: 18px;
+      color: var(--gris);
+      margin-bottom: 60px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 48px;
+      font-size: 14px;
+      color: var(--laiton);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .cover-version {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      font-size: 12px;
+      color: var(--gris);
+    }
+
+    /* ============================================
+       TABLE OF CONTENTS
+       ============================================ */
+    .toc {
+      background: var(--surface);
+      padding: 60px;
+      border-radius: 16px;
+      margin: 60px 0;
+    }
+
+    .toc-title {
+      font-size: 28px;
+      color: var(--laiton);
+      margin-bottom: 32px;
+    }
+
+    .toc-list {
+      list-style: none;
+      counter-reset: toc-counter;
+    }
+
+    .toc-list li {
+      counter-increment: toc-counter;
+      display: flex;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 16px;
+    }
+
+    .toc-list li::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--laiton);
+      font-size: 14px;
+      width: 40px;
+      flex-shrink: 0;
+    }
+
+    .toc-list li span {
+      flex: 1;
+    }
+
+    .toc-list li .toc-page {
+      color: var(--gris);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* ============================================
+       SECTION HEADERS
+       ============================================ */
+    .section-number {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      color: var(--laiton);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 42px;
+      color: var(--creme);
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--gris);
+      max-width: 700px;
+      margin-bottom: 48px;
+    }
+
+    h3 {
+      font-size: 22px;
+      color: var(--laiton);
+      margin: 40px 0 16px;
+    }
+
+    /* ============================================
+       CARDS
+       ============================================ */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .card-prestige {
+      background: var(--surface);
+      border: 2px solid var(--laiton);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 0 24px rgba(184,144,64,0.12);
+      position: relative;
+    }
+
+    .card-prestige::after {
+      content: 'POPULAIRE';
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--laiton);
+      color: var(--fond);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--creme);
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card-label {
+      font-size: 13px;
+      color: var(--gris);
+    }
+
+    /* ============================================
+       TABLES
+       ============================================ */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+
+    th {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--laiton);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--laiton);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    tr:hover td { background: rgba(184,144,64,0.04); }
+
+    .td-accent { color: var(--laiton); font-weight: 600; }
+    .td-mono { font-family: 'Share Tech Mono', monospace; }
+    .td-rouge { color: var(--rouge); }
+    .td-vert { color: #4a9060; }
+    .td-right { text-align: right; }
+
+    /* ============================================
+       KPI BADGES
+       ============================================ */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin: 32px 0;
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .kpi-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--laiton);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--gris);
+      margin-top: 4px;
+    }
+
+    /* ============================================
+       CHART PLACEHOLDERS
+       ============================================ */
+    .chart-placeholder {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 48px;
+      text-align: center;
+      color: var(--gris);
+      font-size: 14px;
+      margin: 24px 0;
+    }
+
+    .chart-placeholder .chart-title {
+      color: var(--laiton);
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* Bar chart simulation */
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      height: 200px;
+      padding: 24px;
+      background: var(--surface);
+      border-radius: 12px;
+      margin: 24px 0;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 60px;
+      border-radius: 4px 4px 0 0;
+      transition: height 0.3s;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: var(--gris);
+      text-align: center;
+    }
+
+    .bar-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--creme);
+    }
+
+    /* ============================================
+       TIMELINE
+       ============================================ */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      margin: 32px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 40px 24px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -32px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--laiton);
+      border: 2px solid var(--fond);
+    }
+
+    .timeline-date {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: var(--laiton);
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      text-transform: uppercase;
+      color: var(--creme);
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: var(--gris);
+    }
+
+    /* ============================================
+       QUOTES
+       ============================================ */
+    blockquote {
+      border-left: 3px solid var(--laiton);
+      padding: 16px 24px;
+      margin: 24px 0;
+      background: rgba(184,144,64,0.04);
+      border-radius: 0 8px 8px 0;
+    }
+
+    blockquote p {
+      font-family: 'Crimson Text', Georgia, serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--creme-chaud);
+    }
+
+    /* ============================================
+       BADGES & TAGS
+       ============================================ */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    .badge-laiton { background: var(--laiton); color: var(--fond); }
+    .badge-rouge { background: var(--rouge); color: white; }
+    .badge-bleu { background: var(--bleu-acier); color: white; }
+    .badge-violet { background: var(--violet); color: white; }
+    .badge-outline { border: 1px solid var(--border); color: var(--gris); }
+
+    /* ============================================
+       PROGRESS BAR
+       ============================================ */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--surface);
+      border-radius: 4px;
+      margin: 8px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--laiton), var(--creme-chaud));
+    }
+
+    /* ============================================
+       SEPARATOR & UTILITIES
+       ============================================ */
+    .sep { height: 1px; background: var(--border); margin: 40px 0; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+    .mt-48 { margin-top: 48px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mb-32 { margin-bottom: 32px; }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-gris { color: var(--gris); }
+    .text-laiton { color: var(--laiton); }
+    .text-rouge { color: var(--rouge); }
+    .text-bleu { color: var(--bleu-acier); }
+    .text-sm { font-size: 13px; }
+    .text-lg { font-size: 18px; }
+    .fw-bold { font-weight: 700; }
+
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .gap-8 { gap: 8px; }
+    .gap-16 { gap: 16px; }
+    .gap-24 { gap: 24px; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+
+    /* Page break helper for PDF */
+    .page-break { page-break-before: always; break-before: page; }
+  </style>
+</head>
+<body>
+
+<!-- =============================================
+     COVER PAGE
+     ============================================= -->
+<div class="cover">
+  <div class="cover-logo display">CACHE CACHE</div>
+  <div class="cover-killer display">KILLER</div>
+  <div class="cover-subtitle">Survival Grandeur Nature &mdash; Le Cirque que le Temps a Oublie</div>
+  <div class="cover-tagline serif-quote">&laquo; Bienvenue au plus grand spectacle de votre vie&hellip; et peut-etre le dernier. &raquo;</div>
+  <div class="cover-meta">
+    <span>Business Plan V3</span>
+    <span>Fevrier 2026</span>
+    <span>Confidentiel</span>
+  </div>
+  <div class="cover-version">SAS Cache Cache Killer &bull; Capital 21 000 &euro; &bull; Essonne (91)</div>
+</div>
+
+<!-- =============================================
+     TABLE OF CONTENTS
+     ============================================= -->
+<div class="page">
+  <div class="toc">
+    <div class="toc-title display">Sommaire</div>
+    <ol class="toc-list">
+      <li><span>Executive Summary</span><span class="toc-page">03</span></li>
+      <li><span>Le Concept &mdash; Le Cirque Delave</span><span class="toc-page">05</span></li>
+      <li><span>Analyse de Marche</span><span class="toc-page">08</span></li>
+      <li><span>Modele Economique &amp; Tarification</span><span class="toc-page">11</span></li>
+      <li><span>Economie CCK Coins &mdash; Gamification</span><span class="toc-page">15</span></li>
+      <li><span>Offres B2B &mdash; Privatisations</span><span class="toc-page">19</span></li>
+      <li><span>Equipe Fondatrice</span><span class="toc-page">21</span></li>
+      <li><span>Implantation &amp; Capacite</span><span class="toc-page">23</span></li>
+      <li><span>Plan Financier Previsionnel</span><span class="toc-page">25</span></li>
+      <li><span>Plan de Financement</span><span class="toc-page">30</span></li>
+      <li><span>Strategie Marketing &amp; Lancement</span><span class="toc-page">33</span></li>
+      <li><span>Roadmap &amp; Calendrier</span><span class="toc-page">36</span></li>
+      <li><span>Stack Technique &amp; Innovation</span><span class="toc-page">38</span></li>
+      <li><span>Conformite Legale &amp; Fiscale</span><span class="toc-page">40</span></li>
+      <li><span>Indicateurs Cles &amp; Objectifs</span><span class="toc-page">42</span></li>
+      <li><span>Annexes</span><span class="toc-page">44</span></li>
+    </ol>
+  </div>
+
+  <!-- =============================================
+       01 — EXECUTIVE SUMMARY
+       ============================================= -->
+  <section id="executive-summary">
+    <div class="section-number">01</div>
+    <h2 class="section-title">Executive Summary</h2>
+    <p class="section-subtitle">Le premier jeu de survie grandeur nature en France, a la croisee du jeu video, du theatre immersif et du divertissement physique.</p>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">770M&euro;</div>
+        <div class="kpi-label">Marche cible FR</div>
+        <div class="kpi-sub">Divertissement immersif</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">464K&euro;</div>
+        <div class="kpi-label">CA Annee 2</div>
+        <div class="kpi-sub">Scenario reference</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">30%</div>
+        <div class="kpi-label">Marge nette</div>
+        <div class="kpi-sub">Annee 3 (maturite)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">227K&euro;</div>
+        <div class="kpi-label">Financement total</div>
+        <div class="kpi-sub">Equity + dette + grants</div>
+      </div>
+    </div>
+
+    <blockquote>
+      <p>Cache Cache Killer transforme le cache-cache en spectacle immersif. 2 a 10 joueurs s'affrontent dans un cirque abandonne pendant 20 minutes. Survivants contre Killers. Pas de regles complexes, pas de condition physique requise &mdash; juste l'instinct de survie.</p>
+    </blockquote>
+
+    <div class="grid-2 mt-48">
+      <div class="card">
+        <div class="card-title">Le probleme</div>
+        <p class="mt-16">Le segment 18-35 ans est sous-exploite en divertissement physique hors sport. Les escape games stagnent (900 salles, faible differenciation). Le laser game n'a pas innove depuis 20 ans. <strong>60% des joueurs</strong> recherchent des concepts hybrides.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">La solution</div>
+        <p class="mt-16">Un format inédit : <strong>20 min, asymetrique, theatral</strong>. Le Killer est un Maitre de Ceremonie, pas un monstre. L'experience combine la tension du jeu video (Dead by Daylight), l'immersion du theatre et l'adrénaline du jeu physique. <strong>Rejouabilite infinie</strong> grace a la gamification (XP + Coins + Badges).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       02 — LE CONCEPT
+       ============================================= -->
+  <section id="concept" class="page-break">
+    <div class="section-number">02</div>
+    <h2 class="section-title">Le Concept &mdash; Le Cirque Delave</h2>
+    <p class="section-subtitle">Un cirque ambulant que le temps a oublie. Les lumieres vacillent, les rires se melent aux cris, et le spectacle ne s'arrete jamais.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Game Design</h3>
+        <p>Sessions de <strong>20 minutes</strong>, nouvelle session toutes les 10 minutes. Jusqu'a <strong>60 joueurs/heure</strong>.</p>
+
+        <div class="mt-24">
+          <div class="flex items-center gap-8 mb-16">
+            <span class="badge badge-bleu">Survivants</span>
+            <span class="text-sm text-gris">2-8 joueurs &mdash; Activent des generateurs pour ouvrir la sortie</span>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="badge badge-rouge">Killers</span>
+            <span class="text-sm text-gris">1-2 joueurs &mdash; Chassent avec lampe infrarouge</span>
+          </div>
+        </div>
+
+        <h3>Arc Emotionnel</h3>
+        <table>
+          <thead><tr><th>Phase</th><th>Duree</th><th>Emotion</th></tr></thead>
+          <tbody>
+            <tr><td>Phase 1 &mdash; Preparation</td><td>14-20 min</td><td>Exploration, tension croissante</td></tr>
+            <tr><td>Phase 2 &mdash; Extraction</td><td>Temps restant</td><td><span class="td-rouge fw-bold">PANIQUE TOTALE</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <h3>Equilibrage Dynamique</h3>
+        <table>
+          <thead><tr><th>Joueurs</th><th>Killers</th><th>Survivants</th><th>Mode</th></tr></thead>
+          <tbody>
+            <tr><td>2-3</td><td>1</td><td>1-2</td><td>Duel</td></tr>
+            <tr><td>4-5</td><td>1</td><td>3-4</td><td>1 vs Many</td></tr>
+            <tr><td>6-7</td><td>1</td><td>5-6</td><td>Standard</td></tr>
+            <tr><td>8-9</td><td>1-2</td><td>6-8</td><td>Dual Killer</td></tr>
+            <tr><td>10</td><td>2</td><td>8</td><td>Dual Killer</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Briefing 3 Couches</h3>
+        <div class="card mt-16">
+          <div class="flex items-center gap-8 mb-16">
+            <span class="badge badge-outline">1</span>
+            <span><strong>Pre-briefing passif</strong> &mdash; Video 90s en attente, 4 regles fondamentales</span>
+          </div>
+          <div class="flex items-center gap-8 mb-16">
+            <span class="badge badge-outline">2</span>
+            <span><strong>Briefing actif</strong> &mdash; 90s theatrale, demo IR, mystere preserve</span>
+          </div>
+          <div class="flex items-center gap-8">
+            <span class="badge badge-outline">3</span>
+            <span><strong>Tuto integre</strong> &mdash; 90s premiers pas in-game, apprentissage par l'action</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       03 — MARCHE
+       ============================================= -->
+  <section id="marche" class="page-break">
+    <div class="section-number">03</div>
+    <h2 class="section-title">Analyse de Marche</h2>
+    <p class="section-subtitle">Un marche de 770M&euro; en croissance de 10-12%/an, avec une niche vierge a l'intersection de trois industries.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-value text-laiton">220M&euro;</div>
+        <div class="card-title">Escape Games</div>
+        <p class="text-sm text-gris mt-16">900 salles en France. 70% de taux de survie a 2 ans. Marche en cours de consolidation.</p>
+      </div>
+      <div class="card">
+        <div class="card-value text-laiton">550M&euro;</div>
+        <div class="card-title">Laser Game</div>
+        <p class="text-sm text-gris mt-16">65-70% de taux d'occupation. Format inchange depuis 20 ans. Innovation quasi nulle.</p>
+      </div>
+      <div class="card">
+        <div class="card-value text-rouge">Vierge</div>
+        <div class="card-title">Survival IRL</div>
+        <p class="text-sm text-gris mt-16">Aucun acteur positionne sur le croisement jeu video asymetrique + theatre immersif + jeu physique.</p>
+      </div>
+    </div>
+
+    <h3>Positionnement Concurrentiel</h3>
+    <table>
+      <thead>
+        <tr><th>Critere</th><th>Escape Game</th><th>Laser Game</th><th class="td-accent">Cache Cache Killer</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Duree session</td><td>60 min</td><td>15-20 min</td><td class="td-accent">20 min</td></tr>
+        <tr><td>Joueurs/session</td><td>2-6</td><td>10-40</td><td class="td-accent">2-10</td></tr>
+        <tr><td>Rejouabilite</td><td class="td-rouge">Faible (1x/scenario)</td><td>Moyenne</td><td class="td-accent">Elevee (XP + progression)</td></tr>
+        <tr><td>Immersion narrative</td><td>Forte</td><td class="td-rouge">Quasi nulle</td><td class="td-accent">Tres forte (univers theatral)</td></tr>
+        <tr><td>Asymetrie</td><td>Non</td><td>Non</td><td class="td-accent">Oui (Killers vs Survivants)</td></tr>
+        <tr><td>Gamification digitale</td><td>Non</td><td>Basique</td><td class="td-accent">Complete (XP, Coins, Badges, Classement)</td></tr>
+        <tr><td>Prix moyen</td><td>25-35&euro;</td><td>10-15&euro;</td><td class="td-accent">18&euro; (12&euro; off-peak)</td></tr>
+        <tr><td>Panier moyen</td><td>25-35&euro;</td><td>10-15&euro;</td><td class="td-accent">30,60&euro; TTC</td></tr>
+      </tbody>
+    </table>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">60%</div>
+        <div class="kpi-label">Joueurs FR</div>
+        <div class="kpi-sub">Preferent concepts hybrides</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">18-35</div>
+        <div class="kpi-label">Coeur de cible</div>
+        <div class="kpi-sub">Segment sous-exploite</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">10-12%</div>
+        <div class="kpi-label">Croissance/an</div>
+        <div class="kpi-sub">Marche immersif FR</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">8.5/10</div>
+        <div class="kpi-label">Intention retour</div>
+        <div class="kpi-sub">Playtests beta</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       04 — MODELE ECONOMIQUE
+       ============================================= -->
+  <section id="modele-eco" class="page-break">
+    <div class="section-number">04</div>
+    <h2 class="section-title">Modele Economique &amp; Tarification</h2>
+    <p class="section-subtitle">Un modele a double flux : billetterie par session + prepaid CCK Coins pour les habitues.</p>
+
+    <h3>Tarification Sessions</h3>
+    <table>
+      <thead><tr><th>Creneau</th><th>Prix TTC</th><th>Prix HT</th><th>TVA</th><th>Jours</th></tr></thead>
+      <tbody>
+        <tr><td class="fw-bold">Plein tarif</td><td class="td-accent">18,00 &euro;</td><td>16,36 &euro;</td><td>10%</td><td>Mercredi &rarr; Dimanche</td></tr>
+        <tr><td>Tarif creux</td><td>12,00 &euro;</td><td>10,91 &euro;</td><td>10%</td><td>Lundi &amp; Mardi</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Decomposition du Panier Moyen</h3>
+    <div class="grid-2">
+      <div>
+        <table>
+          <thead><tr><th>Composante</th><th>% clients</th><th>Prix HT</th><th>Contribution</th></tr></thead>
+          <tbody>
+            <tr><td>1 partie (WE)</td><td>29%</td><td>15,00 &euro;</td><td>4,35 &euro;</td></tr>
+            <tr><td>2 parties (WE)</td><td>63%</td><td>29,17 &euro;</td><td>18,38 &euro;</td></tr>
+            <tr><td>1 partie (creux)</td><td>3%</td><td>12,50 &euro;</td><td>0,38 &euro;</td></tr>
+            <tr><td>2 parties (creux)</td><td>5%</td><td>20,83 &euro;</td><td>1,04 &euro;</td></tr>
+            <tr><td>Boissons</td><td>35%</td><td>2,50 &euro;</td><td>0,88 &euro;</td></tr>
+            <tr class="fw-bold"><td>Panier moyen HT</td><td></td><td></td><td class="td-accent">25,50 &euro;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="kpi" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+          <div class="kpi-value">30,60&euro;</div>
+          <div class="kpi-label">Panier moyen TTC</div>
+          <div class="kpi-sub mt-16">+15,3% vs V2 (22,11&euro; &rarr; 25,50&euro; HT)</div>
+          <div class="kpi-sub">Marge brute : ~96%</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Regime TVA</h3>
+    <table>
+      <thead><tr><th>Activite</th><th>Taux TVA</th><th>Base legale</th><th>Compte PCG</th></tr></thead>
+      <tbody>
+        <tr><td>Billetterie (sessions jeu)</td><td class="td-accent">10%</td><td>Art. 279 b nonies CGI</td><td>706000</td></tr>
+        <tr><td>Bar &amp; consommations</td><td>20%</td><td>Taux normal</td><td>707100</td></tr>
+        <tr><td>Merchandising</td><td>20%</td><td>Taux normal</td><td>707200</td></tr>
+        <tr><td>Achat CCK Coins</td><td class="text-gris">Non soumis</td><td>PCA &mdash; pas de CA a l'achat</td><td>487100</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =============================================
+       05 — CCK COINS
+       ============================================= -->
+  <section id="coins" class="page-break">
+    <div class="section-number">05</div>
+    <h2 class="section-title">Economie CCK Coins</h2>
+    <p class="section-subtitle">Double monnaie : XP (progression pure, jamais achetable) et CCK Coins (monnaie prepayee + recompenses).</p>
+
+    <div class="grid-2 mb-32">
+      <div class="card" style="border-left: 3px solid var(--violet);">
+        <div class="card-title"><span class="badge badge-violet">XP</span> &mdash; Experience</div>
+        <p class="mt-16 text-sm">Gagnee uniquement en jouant. Niveaux 1&rarr;10. Debloque titres, badges, sons custom. <strong>Jamais achetable.</strong></p>
+        <p class="text-sm text-gris mt-16">50-150 XP par partie selon la performance.</p>
+      </div>
+      <div class="card" style="border-left: 3px solid var(--laiton);">
+        <div class="card-title"><span class="badge badge-laiton">COINS</span> &mdash; Monnaie CCK</div>
+        <p class="mt-16 text-sm">Achetable en packs OU gagnee via progression. Depensee pour parties, consommations, goodies. <strong>Comptabilite PCA.</strong></p>
+        <p class="text-sm text-gris mt-16">~248 coins gratuits sur le parcours L1&rarr;L10 (~40 parties).</p>
+      </div>
+    </div>
+
+    <h3>Packs d'achat CCK Coins</h3>
+    <div class="grid-4">
+      <div class="card">
+        <div class="badge badge-outline mb-16">Flash</div>
+        <div class="card-title">Encore</div>
+        <div class="card-value text-laiton">110</div>
+        <div class="card-label">CCK Coins</div>
+        <div class="sep"></div>
+        <div class="mono fw-bold">15,00 &euro;</div>
+        <div class="text-sm text-gris mt-16">Post-game uniquement. Fenetre 30 min, 1x/visite. Impulse buy.</div>
+        <div class="text-sm mono text-gris mt-16">0,136 &euro;/coin</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Le Billet</div>
+        <div class="card-value text-laiton">265</div>
+        <div class="card-label">CCK Coins</div>
+        <div class="sep"></div>
+        <div class="mono fw-bold">35,00 &euro;</div>
+        <div class="text-sm text-gris mt-16">2 parties + 2 cannettes + 1 snack</div>
+        <div class="text-sm mono text-gris mt-16">0,132 &euro;/coin</div>
+      </div>
+      <div class="card-prestige">
+        <div class="card-title">Le Spectacle</div>
+        <div class="card-value text-laiton">560</div>
+        <div class="card-label">CCK Coins</div>
+        <div class="sep"></div>
+        <div class="mono fw-bold">70,00 &euro;</div>
+        <div class="text-sm text-gris mt-16">5 parties + 3 cannettes + 1 snack</div>
+        <div class="text-sm mono text-gris mt-16">0,125 &euro;/coin</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Le Ringmaster</div>
+        <div class="card-value text-laiton">1 100</div>
+        <div class="card-label">CCK Coins</div>
+        <div class="sep"></div>
+        <div class="mono fw-bold">130,00 &euro;</div>
+        <div class="text-sm text-gris mt-16">10 parties + 3 combos + 1 goodie exclusif</div>
+        <div class="text-sm mono text-gris mt-16">0,118 &euro;/coin</div>
+      </div>
+    </div>
+
+    <h3>Depense des Coins</h3>
+    <table>
+      <thead><tr><th>Article</th><th>Coins</th><th>Equiv. EUR (Billet)</th><th>Equiv. EUR (Ringmaster)</th></tr></thead>
+      <tbody>
+        <tr><td>Boisson / jus / eau</td><td class="td-mono">15</td><td>2,04 &euro;</td><td>1,77 &euro;</td></tr>
+        <tr><td>Snack</td><td class="td-mono">15</td><td>2,04 &euro;</td><td>1,77 &euro;</td></tr>
+        <tr><td>Combo (boisson + snack)</td><td class="td-mono">25</td><td>3,40 &euro;</td><td>2,95 &euro;</td></tr>
+        <tr><td>Partie supplementaire</td><td class="td-mono">100</td><td>13,60 &euro;</td><td>11,80 &euro;</td></tr>
+        <tr><td>Goodie petit (sticker)</td><td class="td-mono">25</td><td>3,40 &euro;</td><td>2,95 &euro;</td></tr>
+        <tr><td>Goodie moyen (t-shirt)</td><td class="td-mono">180</td><td>24,48 &euro;</td><td>21,24 &euro;</td></tr>
+        <tr><td>Goodie premium (masque)</td><td class="td-mono">350</td><td>47,60 &euro;</td><td>41,30 &euro;</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Parcours Joueur Type</h3>
+    <table>
+      <thead><tr><th>Profil</th><th>Parties/mois</th><th>Coins gratuits</th><th>Pack achete</th><th>Depense/mois</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-outline">Curieux</span></td><td>1</td><td>~20</td><td>Encore (15&euro;)</td><td>33 &euro;</td></tr>
+        <tr><td><span class="badge badge-bleu">Regulier</span></td><td>3-4</td><td>~60-70</td><td>Billet (35&euro;)</td><td>35-53 &euro;</td></tr>
+        <tr><td><span class="badge badge-laiton">Fidele</span></td><td>5-8</td><td>~100-120</td><td>Spectacle (70&euro;)</td><td>70-88 &euro;</td></tr>
+        <tr><td><span class="badge badge-rouge">Hardcore</span></td><td>8+</td><td>~140+</td><td>Ringmaster (130&euro;)</td><td>130-148 &euro;</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =============================================
+       06 — B2B PRIVATISATIONS
+       ============================================= -->
+  <section id="b2b" class="page-break">
+    <div class="section-number">06</div>
+    <h2 class="section-title">Offres B2B &mdash; Privatisations</h2>
+    <p class="section-subtitle">10-20% du CA cible. Team building, EVJF, anniversaires, evenements corporate.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="badge badge-bleu mb-16">Corporate</div>
+        <div class="card-title">Team Building</div>
+        <div class="card-value text-laiton">400&euro;+</div>
+        <div class="card-label">A partir de</div>
+        <div class="sep"></div>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li>&bull; 10-30 personnes</li>
+          <li>&bull; 2 heures privatisees</li>
+          <li>&bull; Configuration equipes sur-mesure</li>
+          <li>&bull; Scoreboard inter-equipes live</li>
+          <li>&bull; Recap PDF pour les RH</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="badge badge-rouge mb-16">Evenement</div>
+        <div class="card-title">Anniversaire / EVJF / EVG</div>
+        <div class="card-value text-laiton">250&euro;+</div>
+        <div class="card-label">A partir de</div>
+        <div class="sep"></div>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li>&bull; 8-20 personnes</li>
+          <li>&bull; 1h30 privatisee</li>
+          <li>&bull; Option "VIP Killer" (+30-50&euro;)</li>
+          <li>&bull; Decoration possible</li>
+          <li>&bull; Package photo/video</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="badge badge-laiton mb-16">Premium</div>
+        <div class="card-title">Evenement Sur-Mesure</div>
+        <div class="card-value text-laiton">Devis</div>
+        <div class="card-label">Sur demande</div>
+        <div class="sep"></div>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li>&bull; Taille groupe libre</li>
+          <li>&bull; Maitre de Ceremonie dedie</li>
+          <li>&bull; Scenarisation custom</li>
+          <li>&bull; Options premium illimitees</li>
+          <li>&bull; Facturation B2B avec TVA</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       07 — EQUIPE
+       ============================================= -->
+  <section id="equipe" class="page-break">
+    <div class="section-number">07</div>
+    <h2 class="section-title">Equipe Fondatrice</h2>
+    <p class="section-subtitle">Trois cofondateurs complementaires : creation, operations, strategie.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="badge badge-rouge mb-16">Creation</div>
+        <div class="card-title">Olivier Giupponi</div>
+        <div class="text-sm text-laiton mb-16">President &amp; Directeur Creatif</div>
+        <p class="text-sm">Game designer (ENJMIN + Gobelins). A dirige Blind Bend Studio : 30+ dispositifs electroniques interactifs pour Aventure Fantastique.</p>
+        <div class="sep"></div>
+        <div class="text-sm text-gris">Game design &bull; Electronique embarquee &bull; MQTT &bull; Unity &bull; C++</div>
+      </div>
+      <div class="card">
+        <div class="badge badge-bleu mb-16">Operations</div>
+        <div class="card-title">Mathieu Sardin</div>
+        <div class="text-sm text-laiton mb-16">Directeur General</div>
+        <p class="text-sm">Manager artisan specialise ERP. Chef de projet structures ludiques. Experience terrain en coordination de chantier et logistique indoor.</p>
+        <div class="sep"></div>
+        <div class="text-sm text-gris">Coordination site &bull; Reglementation ERP &bull; Logistique indoor</div>
+      </div>
+      <div class="card">
+        <div class="badge badge-laiton mb-16">Strategie</div>
+        <div class="card-title">Yannick Giupponi</div>
+        <div class="text-sm text-laiton mb-16">Directeur Financier &amp; Strategique</div>
+        <p class="text-sm">Consultant en strategie d'entreprise. Specialiste levee de fonds startup et pilotage financier. Modelisation, fundraising, droit des societes.</p>
+        <div class="sep"></div>
+        <div class="text-sm text-gris">Modelisation financiere &bull; Fundraising &bull; Droit des societes</div>
+      </div>
+    </div>
+
+    <div class="card mt-32">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="card-title">Structure Juridique</div>
+          <p class="text-sm text-gris">SAS &mdash; Societe par Actions Simplifiee</p>
+        </div>
+        <div class="text-right">
+          <div class="mono text-laiton text-lg">21 000 &euro;</div>
+          <div class="text-sm text-gris">Capital social &bull; 2 100 actions &bull; 33,33% chacun</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       08 — IMPLANTATION
+       ============================================= -->
+  <section id="implantation" class="page-break">
+    <div class="section-number">08</div>
+    <h2 class="section-title">Implantation &amp; Capacite</h2>
+    <p class="section-subtitle">Essonne (91), Ile-de-France. Un site de 650 m&sup2; calibre pour 60 joueurs/heure.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Repartition des Espaces</h3>
+        <table>
+          <thead><tr><th>Zone</th><th>Surface</th><th>Fonction</th></tr></thead>
+          <tbody>
+            <tr><td class="fw-bold">Zone de jeu</td><td class="td-mono">~500 m&sup2;</td><td>Labyrinthe semi-industriel, scenographie</td></tr>
+            <tr><td>Lobby / Bar</td><td class="td-mono">~100 m&sup2;</td><td>Accueil, billetterie, rafraichissements</td></tr>
+            <tr><td>Technique / Admin</td><td class="td-mono">~50 m&sup2;</td><td>Serveurs MQTT, equipements, bureau</td></tr>
+            <tr class="fw-bold"><td>Total</td><td class="td-mono">~650 m&sup2;</td><td>Hauteur sous plafond : 4m</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Criteres de Selection</h3>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li class="mb-16">&bull; Zone commerciale forte + acces transports</li>
+          <li class="mb-16">&bull; Conformite ERP (Etablissement Recevant du Public)</li>
+          <li class="mb-16">&bull; Parking + visibilite facade</li>
+          <li class="mb-16">&bull; Budget loyer : 10 000 &euro;/mois HT (V3)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Capacite Operationnelle</h3>
+        <div class="kpi-row" style="grid-template-columns: 1fr 1fr;">
+          <div class="kpi">
+            <div class="kpi-value">42h</div>
+            <div class="kpi-label">Ouverture/semaine</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">168</div>
+            <div class="kpi-label">Sessions/semaine</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">672</div>
+            <div class="kpi-label">Sessions/mois</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">6 720</div>
+            <div class="kpi-label">Joueurs max/mois</div>
+          </div>
+        </div>
+
+        <h3>Horaires d'Ouverture</h3>
+        <table>
+          <thead><tr><th>Jour</th><th>Heures</th><th>Creneaux</th></tr></thead>
+          <tbody>
+            <tr><td>Lundi</td><td class="td-mono">4h</td><td class="text-gris">Creux</td></tr>
+            <tr><td>Mardi</td><td class="td-mono">4h</td><td class="text-gris">Creux</td></tr>
+            <tr><td>Mercredi</td><td class="td-mono">8h</td><td>Plein tarif</td></tr>
+            <tr><td>Jeudi</td><td class="td-mono">4h</td><td class="text-gris">Creux</td></tr>
+            <tr><td>Vendredi</td><td class="td-mono">8h</td><td>Plein tarif</td></tr>
+            <tr><td>Samedi</td><td class="td-mono fw-bold">14h</td><td class="td-accent">Prime time</td></tr>
+            <tr><td>Dimanche</td><td class="td-mono fw-bold">14h</td><td class="td-accent">Prime time</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       09 — PLAN FINANCIER
+       ============================================= -->
+  <section id="financier" class="page-break">
+    <div class="section-number">09</div>
+    <h2 class="section-title">Plan Financier Previsionnel</h2>
+    <p class="section-subtitle">Seuil de rentabilite a 315K&euro;/an (60% d'occupation). Marge nette de 30% a maturite.</p>
+
+    <h3>Projection 4 Ans &mdash; Scenario Reference</h3>
+    <table>
+      <thead>
+        <tr><th>Indicateur</th><th>2026 (4 mois)</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="fw-bold">Chiffre d'affaires</td><td class="td-mono">~90K &euro;</td><td class="td-mono">464K &euro;</td><td class="td-mono fw-bold td-accent">642K &euro;</td><td class="td-mono fw-bold td-accent">642K &euro;</td></tr>
+        <tr><td class="fw-bold">Resultat net</td><td class="td-mono td-rouge">-21K &euro;</td><td class="td-mono td-vert">+92K &euro;</td><td class="td-mono td-vert fw-bold">+191K &euro;</td><td class="td-mono td-vert fw-bold">+191K &euro;</td></tr>
+        <tr><td>Marge nette</td><td class="td-mono text-gris">N/A</td><td class="td-mono">20%</td><td class="td-mono td-accent">30%</td><td class="td-mono td-accent">30%</td></tr>
+        <tr><td>EBITDA</td><td class="td-mono text-gris">&mdash;</td><td class="td-mono">&mdash;</td><td class="td-mono">&mdash;</td><td class="td-mono td-accent">279K &euro; (43%)</td></tr>
+        <tr><td>Occupation</td><td class="td-mono">30-40%</td><td class="td-mono">50-60%</td><td class="td-mono">60%</td><td class="td-mono">60%</td></tr>
+        <tr><td>Effectif</td><td class="td-mono">3-4</td><td class="td-mono">6-7</td><td class="td-mono">8-9</td><td class="td-mono">9-10</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Bar chart CA -->
+    <h3>Evolution du Chiffre d'Affaires</h3>
+    <div class="bar-chart">
+      <div class="bar-group">
+        <div class="bar-value">90K</div>
+        <div class="bar" style="height: 14%; background: var(--laiton);"></div>
+        <div class="bar-label">2026<br><span class="text-gris">(4 mois)</span></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">464K</div>
+        <div class="bar" style="height: 72%; background: var(--laiton);"></div>
+        <div class="bar-label">2027</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">642K</div>
+        <div class="bar" style="height: 100%; background: linear-gradient(180deg, var(--laiton), #d4a94e);"></div>
+        <div class="bar-label">2028</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">642K</div>
+        <div class="bar" style="height: 100%; background: linear-gradient(180deg, var(--laiton), #d4a94e);"></div>
+        <div class="bar-label">2029</div>
+      </div>
+    </div>
+
+    <h3>3 Scenarios</h3>
+    <table>
+      <thead><tr><th>Scenario</th><th>Occupation Y3</th><th>CA Y3</th><th>Resultat Y3</th><th>ROE</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-outline">Prudent</span></td><td class="td-mono">40%</td><td class="td-mono">~428K &euro;</td><td class="td-mono">~75K &euro;</td><td class="td-mono">25%</td></tr>
+        <tr><td><span class="badge badge-laiton">Reference</span></td><td class="td-mono">60%</td><td class="td-mono">642K &euro;</td><td class="td-mono td-vert">191K &euro;</td><td class="td-mono td-accent">35%</td></tr>
+        <tr><td><span class="badge badge-rouge">Optimiste</span></td><td class="td-mono">80%</td><td class="td-mono">~856K &euro;</td><td class="td-mono td-vert">~310K &euro;</td><td class="td-mono td-accent">42%</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Seuil de Rentabilite</h3>
+    <div class="card">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-sm text-gris">Break-even annuel</div>
+          <div class="card-value text-laiton">315K &euro;</div>
+          <div class="text-sm text-gris">~60% d'occupation sur 12 mois</div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm text-gris">Marge brute</div>
+          <div class="card-value text-laiton">~96%</div>
+          <div class="text-sm text-gris">Cout marginal quasi nul</div>
+        </div>
+      </div>
+      <div class="mt-24">
+        <div class="text-sm text-gris mb-16">Progression vers le seuil (Annee 2)</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%;"></div>
+        </div>
+        <div class="flex justify-between text-sm text-gris mt-16">
+          <span>0 &euro;</span>
+          <span class="td-accent">315K &euro; &mdash; Seuil atteint</span>
+          <span>464K &euro; CA reel</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       10 — FINANCEMENT
+       ============================================= -->
+  <section id="financement" class="page-break">
+    <div class="section-number">10</div>
+    <h2 class="section-title">Plan de Financement</h2>
+    <p class="section-subtitle">227K&euro; repartis entre equity, dette et aides. Investissement initial de 150K&euro; TTC.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Sources de Financement</h3>
+        <table>
+          <thead><tr><th>Source</th><th>Montant</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Apport fondateurs</td><td class="td-mono">31K &euro;</td><td><span class="badge badge-laiton">Equity</span></td></tr>
+            <tr><td>Investisseurs externes</td><td class="td-mono">100K &euro;</td><td><span class="badge badge-laiton">Equity</span></td></tr>
+            <tr><td>Pret bancaire</td><td class="td-mono">60K &euro;</td><td><span class="badge badge-bleu">Dette</span></td></tr>
+            <tr><td>Crowdfunding (Ulule)</td><td class="td-mono">6K &euro;</td><td><span class="badge badge-violet">Crowd</span></td></tr>
+            <tr><td>Aides a l'entrepreneuriat</td><td class="td-mono">30K &euro;</td><td><span class="badge badge-outline">Grant</span></td></tr>
+            <tr class="fw-bold"><td>Total</td><td class="td-mono td-accent">227K &euro;</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Emploi des Fonds (150K&euro; TTC)</h3>
+        <table>
+          <thead><tr><th>Poste</th><th>TTC</th><th>Amort.</th></tr></thead>
+          <tbody>
+            <tr><td>Renovation du site</td><td class="td-mono">70K &euro;</td><td class="text-gris">10 ans</td></tr>
+            <tr><td>Scenographie &amp; decors</td><td class="td-mono">25K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Equipement technique</td><td class="td-mono">10K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Equipement de jeu</td><td class="td-mono">3K &euro;</td><td class="text-gris">3 ans</td></tr>
+            <tr><td>Mobilier &amp; lobby</td><td class="td-mono">25K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Securite &amp; conformite</td><td class="td-mono">10K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Divers &amp; imprevus</td><td class="td-mono">7K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr class="fw-bold"><td>Total investissement</td><td class="td-mono td-accent">150K &euro;</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Charges Fixes Mensuelles</h3>
+    <table>
+      <thead><tr><th>Poste</th><th>Mensuel HT</th><th>Annuel HT</th></tr></thead>
+      <tbody>
+        <tr><td>Loyer</td><td class="td-mono">10 000 &euro;</td><td class="td-mono">120 000 &euro;</td></tr>
+        <tr><td>Salaires (par employe)</td><td class="td-mono">2 169 &euro;</td><td class="td-mono text-gris">x effectif</td></tr>
+        <tr><td>Marketing &amp; Google Ads</td><td class="td-mono">3 417 &euro;</td><td class="td-mono">41 000 &euro;</td></tr>
+        <tr><td>Electricite</td><td class="td-mono">1 250 &euro;</td><td class="td-mono">15 000 &euro;</td></tr>
+        <tr><td>Assurance</td><td class="td-mono">417 &euro;</td><td class="td-mono">5 000 &euro;</td></tr>
+        <tr><td>Securite + Nettoyage</td><td class="td-mono">834 &euro;</td><td class="td-mono">10 000 &euro;</td></tr>
+        <tr><td>Admin + Banque + Telecom</td><td class="td-mono">609 &euro;</td><td class="td-mono">7 300 &euro;</td></tr>
+        <tr><td>Infra digitale</td><td class="td-mono">~400 &euro;</td><td class="td-mono">~5 000 &euro;</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =============================================
+       11 — MARKETING
+       ============================================= -->
+  <section id="marketing" class="page-break">
+    <div class="section-number">11</div>
+    <h2 class="section-title">Strategie Marketing &amp; Lancement</h2>
+    <p class="section-subtitle">Pre-lancement communautaire + lancement evenementiel + croissance UGC.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Budget Pre-Lancement</h3>
+        <table>
+          <thead><tr><th>Poste</th><th>Budget</th></tr></thead>
+          <tbody>
+            <tr><td>Trailer studio</td><td class="td-mono">3 000 &euro;</td></tr>
+            <tr><td>Site web</td><td class="td-mono">4 500 &euro;</td></tr>
+            <tr><td>Publicite digitale (3 mois)</td><td class="td-mono">3 000 &euro;</td></tr>
+            <tr><td>Visibilite locale</td><td class="td-mono">2 500 &euro;</td></tr>
+            <tr><td>Soiree de lancement</td><td class="td-mono">2 000 &euro;</td></tr>
+            <tr><td>Post-lancement</td><td class="td-mono">3 000 &euro;</td></tr>
+            <tr><td>Reserve goodies</td><td class="td-mono">2 000 &euro;</td></tr>
+            <tr class="fw-bold"><td>Total pre-lancement</td><td class="td-mono td-accent">20 000 &euro;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Budget Mensuel Post-Lancement</h3>
+        <table>
+          <thead><tr><th>Poste</th><th>Mensuel</th></tr></thead>
+          <tbody>
+            <tr><td>Social media management</td><td class="td-mono">1 000 &euro;</td></tr>
+            <tr><td>SEO &amp; contenu</td><td class="td-mono">1 200 &euro;</td></tr>
+            <tr><td>UGC &amp; publicites</td><td class="td-mono">800 &euro;</td></tr>
+            <tr><td>Visibilite locale</td><td class="td-mono">600 &euro;</td></tr>
+            <tr><td>Support digital</td><td class="td-mono">500 &euro;</td></tr>
+            <tr class="fw-bold"><td>Total mensuel</td><td class="td-mono td-accent">4 100 &euro;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>KPIs Pre-Lancement</h3>
+    <div class="kpi-row" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="kpi">
+        <div class="kpi-value">10K</div>
+        <div class="kpi-label">Followers sociaux</div>
+        <div class="kpi-sub">Instagram + TikTok + Facebook</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">5K</div>
+        <div class="kpi-label">Partages contenu</div>
+        <div class="kpi-sub">Viralite organique</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">2K</div>
+        <div class="kpi-label">Commentaires engages</div>
+        <div class="kpi-sub">Communaute active</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       12 — ROADMAP
+       ============================================= -->
+  <section id="roadmap" class="page-break">
+    <div class="section-number">12</div>
+    <h2 class="section-title">Roadmap &amp; Calendrier</h2>
+    <p class="section-subtitle">Du business plan a l'ouverture : 8 mois. Du site 1 au reseau : 3-5 ans.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Fevrier &rarr; Mars 2026</div>
+        <div class="timeline-title">Phase 1 &mdash; Preparation</div>
+        <div class="timeline-desc">Finalisation BP, creation SAS, montage financier, campagne Ulule #1, playtests VIP + capture video.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Mars &rarr; Septembre 2026</div>
+        <div class="timeline-title">Phase 2 &mdash; Construction</div>
+        <div class="timeline-desc">Renovation du site (gros oeuvre, electricite, ventilation), fabrication des dispositifs electroniques, installation &amp; calibration, recrutement staff.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Ete 2026</div>
+        <div class="timeline-title">Phase 3 &mdash; Pre-Lancement</div>
+        <div class="timeline-desc">Beta Test #1 (grandeur nature + influenceurs), campagne marketing, capture contenu (trailer, photos presse, teasers), Beta Test #2 (1 mois avant, rotation complete).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Octobre 2026</div>
+        <div class="timeline-title">Phase 4 &mdash; Grand Opening</div>
+        <div class="timeline-desc">Ouverture publique. Evenement inaugural. Objectif : etre pret AVANT Halloween (pic commercial). Activations influenceurs escape game (The Escapers, EscapeGame.fr).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2027 &rarr; 2028</div>
+        <div class="timeline-title">Phase 5 &mdash; Croissance</div>
+        <div class="timeline-desc">Montee en charge 50% &rarr; 60% occupation. Enrichissement des scenarios. Lancement des privatisations B2B. Optimisation du modele Coins.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2029+</div>
+        <div class="timeline-title">Phase 6 &mdash; Expansion</div>
+        <div class="timeline-desc">Ouverture site #2 (Lyon, Lille ou Marseille). Pilote franchise. Objectif long terme : reseau de 5-10 sites a horizon 2035.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       13 — TECH
+       ============================================= -->
+  <section id="tech" class="page-break">
+    <div class="section-number">13</div>
+    <h2 class="section-title">Stack Technique &amp; Innovation</h2>
+    <p class="section-subtitle">Architecture digitale complete : site vitrine, PWA joueur, CRM interne, IoT temps reel.</p>
+
+    <table>
+      <thead><tr><th>Couche</th><th>Technologie</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td class="td-accent">Next.js 15 + React + TypeScript</td><td>3 apps : Site, Player PWA, CRM</td></tr>
+        <tr><td>Styles</td><td>Tailwind CSS v4 + Design Tokens</td><td>Palette V3 Cirque Delave</td></tr>
+        <tr><td>Backend / DB</td><td class="td-accent">Supabase (PostgreSQL)</td><td>RLS, Edge Functions, Realtime</td></tr>
+        <tr><td>Auth</td><td>Supabase Auth</td><td>JWT + RLS par role (6 roles)</td></tr>
+        <tr><td>Paiement</td><td class="td-accent">Stripe</td><td>Checkout, webhooks idempotents, PCA</td></tr>
+        <tr><td>IoT / Jeu</td><td>MQTT + Edge Functions</td><td>30+ dispositifs interactifs temps reel</td></tr>
+        <tr><td>Deploiement</td><td>Vercel (CDG1 Paris)</td><td>EU-first, ISR, Edge Middleware</td></tr>
+        <tr><td>Mobile</td><td>PWA (Phase 1) &rarr; Capacitor (Phase 2)</td><td>Profil joueur, coins, badges, stats</td></tr>
+        <tr><td>Email</td><td>Brevo (FR)</td><td>Transactionnel EU-only, RGPD natif</td></tr>
+        <tr><td>Analytics</td><td>Plausible</td><td>Cookie-free, CNIL-exempt</td></tr>
+        <tr><td>Monitoring</td><td>Sentry</td><td>Error tracking, Web Vitals</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card mt-32">
+      <div class="card-title">Couts Digitaux Annuels</div>
+      <div class="flex justify-between items-center mt-16">
+        <div>
+          <p class="text-sm text-gris">Supabase Pro + Vercel + Stripe + App Stores + Domaines + Monitoring</p>
+        </div>
+        <div class="text-right">
+          <div class="mono text-laiton text-lg fw-bold">3 774 &mdash; 5 464 &euro;/an</div>
+          <div class="text-sm text-gris">314 &mdash; 455 &euro;/mois</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       14 — LEGAL
+       ============================================= -->
+  <section id="legal" class="page-break">
+    <div class="section-number">14</div>
+    <h2 class="section-title">Conformite Legale &amp; Fiscale</h2>
+    <p class="section-subtitle">SAS, TVA differenciee, comptabilite PCA, RGPD, FEC A47 A-1.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Comptabilite CCK Coins (PCA)</h3>
+        <div class="card mt-16">
+          <p class="text-sm mb-16">Les CCK Coins ne sont <strong>pas du chiffre d'affaires a l'achat</strong>. Ils sont enregistres en <strong>Produits Constates d'Avance</strong> (passif).</p>
+          <table>
+            <thead><tr><th>Evenement</th><th>Debit</th><th>Credit</th></tr></thead>
+            <tbody>
+              <tr><td>Achat Coins</td><td class="td-mono">411000<br><span class="text-gris text-sm">Clients</span></td><td class="td-mono">487100<br><span class="text-gris text-sm">PCA</span></td></tr>
+              <tr><td>Depense Coins</td><td class="td-mono">487100<br><span class="text-gris text-sm">PCA</span></td><td class="td-mono">706000<br><span class="text-gris text-sm">Prestations</span></td></tr>
+            </tbody>
+          </table>
+          <p class="text-sm text-gris mt-16">Double-entry systematique : sum(debit) = sum(credit). Trigger SQL bloquant. FEC conforme A47 A-1 (18 colonnes, tab-separated, UTF-8).</p>
+        </div>
+      </div>
+      <div>
+        <h3>Conformite RGPD</h3>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li class="mb-16">&bull; <strong>Analytics</strong> : Plausible (cookie-free, CNIL-exempt)</li>
+          <li class="mb-16">&bull; <strong>Email</strong> : Brevo (serveurs FR, DPA signe)</li>
+          <li class="mb-16">&bull; <strong>Hebergement</strong> : Vercel CDG1 + Supabase eu-west-3 Paris</li>
+          <li class="mb-16">&bull; <strong>Export donnees</strong> : endpoint Art. 20 (1 clic)</li>
+          <li class="mb-16">&bull; <strong>Suppression</strong> : anonymisation + conservation comptable legale</li>
+          <li class="mb-16">&bull; <strong>Sous-traitants</strong> : DPA obligatoire avant utilisation</li>
+        </ul>
+
+        <h3>Obligations ERP</h3>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li class="mb-16">&bull; Etablissement Recevant du Public (categorie 5)</li>
+          <li class="mb-16">&bull; Commission de securite avant ouverture</li>
+          <li class="mb-16">&bull; Assurance RC pro + dommages ouvrage</li>
+          <li class="mb-16">&bull; Registre de securite tenu a jour</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       15 — KPIs
+       ============================================= -->
+  <section id="kpis" class="page-break">
+    <div class="section-number">15</div>
+    <h2 class="section-title">Indicateurs Cles &amp; Objectifs</h2>
+    <p class="section-subtitle">Objectifs mesurables par phase de developpement.</p>
+
+    <h3>Annee 1 &mdash; Objectifs de Lancement</h3>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">315K&euro;</div>
+        <div class="kpi-label">CA break-even</div>
+        <div class="kpi-sub">60% occupation</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">4.8/5</div>
+        <div class="kpi-label">Note fun</div>
+        <div class="kpi-sub">Playtests beta</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">8.5/10</div>
+        <div class="kpi-label">Intention retour</div>
+        <div class="kpi-sub">Enquete joueurs</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">16-17&euro;</div>
+        <div class="kpi-label">Prix acceptable</div>
+        <div class="kpi-sub">Etude marche</div>
+      </div>
+    </div>
+
+    <h3>Annee 3 &mdash; Objectifs de Maturite</h3>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">642K&euro;</div>
+        <div class="kpi-label">CA annuel</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">30%</div>
+        <div class="kpi-label">Marge nette</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">43%</div>
+        <div class="kpi-label">EBITDA / CA</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">35%</div>
+        <div class="kpi-label">ROE</div>
+      </div>
+    </div>
+
+    <h3>Vision Long Terme</h3>
+    <div class="card mt-16">
+      <div class="grid-3">
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2029</div>
+          <div class="text-sm text-gris mt-16">Site #2 ouverture</div>
+        </div>
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2031</div>
+          <div class="text-sm text-gris mt-16">Pilote franchise</div>
+        </div>
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2035</div>
+          <div class="text-sm text-gris mt-16">Reseau 5-10 sites</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       CLOSING PAGE
+       ============================================= -->
+  <section class="page-break" style="min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: none;">
+    <div class="display" style="font-size: 48px; color: var(--laiton); margin-bottom: 16px;">CACHE CACHE KILLER</div>
+    <div class="serif-quote" style="font-size: 22px; color: var(--creme-chaud); margin-bottom: 48px;">&laquo; Le plus grand spectacle de votre vie. &raquo;</div>
+    <div class="text-sm text-gris">
+      contact@cachecachekiller.fr &bull; cachecachekiller.fr<br>
+      SAS au capital de 21 000 &euro; &bull; Essonne (91)<br>
+      Document confidentiel &mdash; Fevrier 2026
+    </div>
+  </section>
+
+</div><!-- .page -->
+
+</body>
+</html>
