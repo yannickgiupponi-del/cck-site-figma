@@ -1,0 +1,157 @@
+{
+  "panier_moyen_ht": 25.5,
+  "panier_moyen_ttc": 30.6,
+  "cout_employeur": 2168.59,
+  "taux_is": 0.25,
+  "emprunt_montant": 60000,
+  "emprunt_taux": 0.03,
+  "emprunt_duree_mois": 60,
+  "capacite_max": 6720,
+  "taux_actualisation_dcf": 0.15,
+  "multiple_ve_ebitda": 5,
+  "investissement_total_ttc": 150000,
+  "amort_annuel_total": 23400,
+  "amort_postes": [
+    {
+      "nom": "Aménagement des locaux",
+      "montant_ttc": 70000,
+      "montant_ht": 58333.333333333336,
+      "duree_ans": 10,
+      "amort_annuel_ttc": 7000,
+      "amort_annuel_ht": 5833.333333333334
+    },
+    {
+      "nom": "Scénographie et décors",
+      "montant_ttc": 25000,
+      "montant_ht": 20833.333333333336,
+      "duree_ans": 5,
+      "amort_annuel_ttc": 5000,
+      "amort_annuel_ht": 4166.666666666667
+    },
+    {
+      "nom": "Équipements technologiques",
+      "montant_ttc": 10000,
+      "montant_ht": 8333.333333333334,
+      "duree_ans": 5,
+      "amort_annuel_ttc": 2000,
+      "amort_annuel_ht": 1666.6666666666667
+    },
+    {
+      "nom": "Matériel de jeu",
+      "montant_ttc": 3000,
+      "montant_ht": 2500,
+      "duree_ans": 3,
+      "amort_annuel_ttc": 1000,
+      "amort_annuel_ht": 833.3333333333334
+    },
+    {
+      "nom": "Mobilier et accueil",
+      "montant_ttc": 25000,
+      "montant_ht": 20833.333333333336,
+      "duree_ans": 5,
+      "amort_annuel_ttc": 5000,
+      "amort_annuel_ht": 4166.666666666667
+    },
+    {
+      "nom": "Sécurité et normes",
+      "montant_ttc": 10000,
+      "montant_ht": 8333.333333333334,
+      "duree_ans": 5,
+      "amort_annuel_ttc": 2000,
+      "amort_annuel_ht": 1666.6666666666667
+    },
+    {
+      "nom": "Frais annexes",
+      "montant_ttc": 7000,
+      "montant_ht": 5833.333333333334,
+      "duree_ans": 5,
+      "amort_annuel_ttc": 1400,
+      "amort_annuel_ht": 1166.6666666666667
+    }
+  ],
+  "financement": {
+    "investisseurs": 100000,
+    "emprunt": 60000,
+    "capital": 31000,
+    "soutien": 30000,
+    "crowdfunding": 6000,
+    "total_interets": 1830
+  },
+  "ca_2026": 84888.33333333333,
+  "rn_2026": -28088.56000000001,
+  "charges_2026": 122339.74666666667,
+  "ca_2027": 415850.00000000006,
+  "rn_2027": 50832.855000000054,
+  "charges_2027": 348072.86,
+  "ca_2028": 535355.8333333333,
+  "rn_2028": 100378.35999999993,
+  "charges_2028": 401518.02,
+  "ca_2029": 740656.6666666667,
+  "rn_2029": 219926.13500000007,
+  "charges_2029": 447421.82,
+  "ebe_2026": -29076.41333333334,
+  "va_2026": -2386.6666666666715,
+  "ebe_2027": 92662.14000000007,
+  "va_2027": 211766.00000000006,
+  "ebe_2028": 158362.81333333324,
+  "va_2028": 329512.83333333326,
+  "ebe_2029": 317399.84666666674,
+  "va_2029": 531921.6666666667,
+  "treso_2026": 57000,
+  "treso_2027": 87636.35999999999,
+  "treso_2028": 195371.1283333333,
+  "treso_2029": 421863.2283333333,
+  "valo_dcf_normale": 1552334.8771820557,
+  "valo_ve_ebitda_normale": 1586999.2333333336,
+  "valo_ponderee_normale": 1566200.619642567,
+  "valo_ebitda_2029": 317399.84666666674,
+  "ca_2029_basse": 491108.33333333326,
+  "rn_2029_basse": 54881.69499999995,
+  "treso_2029_basse": 130186.02194444445,
+  "valo_basse": 539852.3104348861,
+  "ca_2029_normale": 740656.6666666667,
+  "rn_2029_normale": 219926.13500000007,
+  "treso_2029_normale": 532468.6127777777,
+  "valo_normale": 1566200.619642567,
+  "ca_2029_haute": 987164.1666666666,
+  "rn_2029_haute": 391795.22,
+  "treso_2029_haute": 1003494.8427777776,
+  "valo_haute": 2651826.4310072185,
+  "sensitivity": {
+    "taux": [
+      30,
+      40,
+      50,
+      60,
+      70,
+      80
+    ],
+    "resultat_net": [
+      -23576.92,
+      90885.29,
+      199453.26,
+      308021.24,
+      416589.21,
+      525157.19
+    ],
+    "tresorerie": [
+      337666.17,
+      429235.93,
+      516090.31,
+      602944.69,
+      689799.07,
+      776653.45
+    ],
+    "ebe": [
+      588.08,
+      145345.38,
+      290102.68,
+      434859.98,
+      579617.28,
+      724374.58
+    ],
+    "seuil_rentabilite_taux": 32.1,
+    "taux_reference": 43.6,
+    "annee_reference": 2029
+  }
+}
