@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCK BP V3 — Tech + Legal + KPIs + Closing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="page">       ============================================= -->
+  <section id="tech" class="page-break">
+    <div class="section-number">13</div>
+    <h2 class="section-title">Stack Technique &amp; Innovation</h2>
+    <p class="section-subtitle">Architecture digitale complete : site vitrine, PWA joueur, CRM interne, IoT temps reel.</p>
+
+    <table>
+      <thead><tr><th>Couche</th><th>Technologie</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td class="td-accent">Next.js 15 + React + TypeScript</td><td>3 apps : Site, Player PWA, CRM</td></tr>
+        <tr><td>Styles</td><td>Tailwind CSS v4 + Design Tokens</td><td>Palette V3 Cirque Delave</td></tr>
+        <tr><td>Backend / DB</td><td class="td-accent">Supabase (PostgreSQL)</td><td>RLS, Edge Functions, Realtime</td></tr>
+        <tr><td>Auth</td><td>Supabase Auth</td><td>JWT + RLS par role (6 roles)</td></tr>
+        <tr><td>Paiement</td><td class="td-accent">Stripe</td><td>Checkout, webhooks idempotents, PCA</td></tr>
+        <tr><td>IoT / Jeu</td><td>MQTT + Edge Functions</td><td>30+ dispositifs interactifs temps reel</td></tr>
+        <tr><td>Deploiement</td><td>Vercel (CDG1 Paris)</td><td>EU-first, ISR, Edge Middleware</td></tr>
+        <tr><td>Mobile</td><td>PWA (Phase 1) &rarr; Capacitor (Phase 2)</td><td>Profil joueur, coins, badges, stats</td></tr>
+        <tr><td>Email</td><td>Brevo (FR)</td><td>Transactionnel EU-only, RGPD natif</td></tr>
+        <tr><td>Analytics</td><td>Plausible</td><td>Cookie-free, CNIL-exempt</td></tr>
+        <tr><td>Monitoring</td><td>Sentry</td><td>Error tracking, Web Vitals</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card mt-32">
+      <div class="card-title">Couts Digitaux Annuels</div>
+      <div class="flex justify-between items-center mt-16">
+        <div>
+          <p class="text-sm text-gris">Supabase Pro + Vercel + Stripe + App Stores + Domaines + Monitoring</p>
+        </div>
+        <div class="text-right">
+          <div class="mono text-laiton text-lg fw-bold">3 774 &mdash; 5 464 &euro;/an</div>
+          <div class="text-sm text-gris">314 &mdash; 455 &euro;/mois</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       14 — LEGAL
+       ============================================= -->
+  <section id="legal" class="page-break">
+    <div class="section-number">14</div>
+    <h2 class="section-title">Conformite Legale &amp; Fiscale</h2>
+    <p class="section-subtitle">SAS, TVA differenciee, comptabilite PCA, RGPD, FEC A47 A-1.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Comptabilite CCK Coins (PCA)</h3>
+        <div class="card mt-16">
+          <p class="text-sm mb-16">Les CCK Coins ne sont <strong>pas du chiffre d'affaires a l'achat</strong>. Ils sont enregistres en <strong>Produits Constates d'Avance</strong> (passif).</p>
+          <table>
+            <thead><tr><th>Evenement</th><th>Debit</th><th>Credit</th></tr></thead>
+            <tbody>
+              <tr><td>Achat Coins</td><td class="td-mono">411000<br><span class="text-gris text-sm">Clients</span></td><td class="td-mono">487100<br><span class="text-gris text-sm">PCA</span></td></tr>
+              <tr><td>Depense Coins</td><td class="td-mono">487100<br><span class="text-gris text-sm">PCA</span></td><td class="td-mono">706000<br><span class="text-gris text-sm">Prestations</span></td></tr>
+            </tbody>
+          </table>
+          <p class="text-sm text-gris mt-16">Double-entry systematique : sum(debit) = sum(credit). Trigger SQL bloquant. FEC conforme A47 A-1 (18 colonnes, tab-separated, UTF-8).</p>
+        </div>
+      </div>
+      <div>
+        <h3>Conformite RGPD</h3>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li class="mb-16">&bull; <strong>Analytics</strong> : Plausible (cookie-free, CNIL-exempt)</li>
+          <li class="mb-16">&bull; <strong>Email</strong> : Brevo (serveurs FR, DPA signe)</li>
+          <li class="mb-16">&bull; <strong>Hebergement</strong> : Vercel CDG1 + Supabase eu-west-3 Paris</li>
+          <li class="mb-16">&bull; <strong>Export donnees</strong> : endpoint Art. 20 (1 clic)</li>
+          <li class="mb-16">&bull; <strong>Suppression</strong> : anonymisation + conservation comptable legale</li>
+          <li class="mb-16">&bull; <strong>Sous-traitants</strong> : DPA obligatoire avant utilisation</li>
+        </ul>
+
+        <h3>Obligations ERP</h3>
+        <ul class="text-sm" style="list-style: none; padding: 0;">
+          <li class="mb-16">&bull; Etablissement Recevant du Public (categorie 5)</li>
+          <li class="mb-16">&bull; Commission de securite avant ouverture</li>
+          <li class="mb-16">&bull; Assurance RC pro + dommages ouvrage</li>
+          <li class="mb-16">&bull; Registre de securite tenu a jour</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       15 — KPIs
+       ============================================= -->
+  <section id="kpis" class="page-break">
+    <div class="section-number">15</div>
+    <h2 class="section-title">Indicateurs Cles &amp; Objectifs</h2>
+    <p class="section-subtitle">Objectifs mesurables par phase de developpement.</p>
+
+    <h3>Annee 1 &mdash; Objectifs de Lancement</h3>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">315K&euro;</div>
+        <div class="kpi-label">CA break-even</div>
+        <div class="kpi-sub">60% occupation</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">4.8/5</div>
+        <div class="kpi-label">Note fun</div>
+        <div class="kpi-sub">Playtests beta</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">8.5/10</div>
+        <div class="kpi-label">Intention retour</div>
+        <div class="kpi-sub">Enquete joueurs</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">16-17&euro;</div>
+        <div class="kpi-label">Prix acceptable</div>
+        <div class="kpi-sub">Etude marche</div>
+      </div>
+    </div>
+
+    <h3>Annee 3 &mdash; Objectifs de Maturite</h3>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value">642K&euro;</div>
+        <div class="kpi-label">CA annuel</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">30%</div>
+        <div class="kpi-label">Marge nette</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">43%</div>
+        <div class="kpi-label">EBITDA / CA</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value">35%</div>
+        <div class="kpi-label">ROE</div>
+      </div>
+    </div>
+
+    <h3>Vision Long Terme</h3>
+    <div class="card mt-16">
+      <div class="grid-3">
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2029</div>
+          <div class="text-sm text-gris mt-16">Site #2 ouverture</div>
+        </div>
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2031</div>
+          <div class="text-sm text-gris mt-16">Pilote franchise</div>
+        </div>
+        <div class="text-center">
+          <div class="mono text-laiton text-lg fw-bold">2035</div>
+          <div class="text-sm text-gris mt-16">Reseau 5-10 sites</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       CLOSING PAGE
+       ============================================= -->
+  <section class="page-break" style="min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: none;">
+    <div class="display" style="font-size: 48px; color: var(--laiton); margin-bottom: 16px;">CACHE CACHE KILLER</div>
+    <div class="serif-quote" style="font-size: 22px; color: var(--creme-chaud); margin-bottom: 48px;">&laquo; Le plus grand spectacle de votre vie. &raquo;</div>
+    <div class="text-sm text-gris">
+      contact@cachecachekiller.fr &bull; cachecachekiller.fr<br>
+      SAS au capital de 21 000 &euro; &bull; Essonne (91)<br>
+      Document confidentiel &mdash; Fevrier 2026
+    </div>
+  </section>
+
+</div><!-- .page --></div>
+</body>
+</html>

@@ -1,0 +1,558 @@
+/* ============================================
+   DESIGN TOKENS — Palette V3 "Cirque Delave"
+   ============================================ */
+:root {
+  --fond: #0d0d12;
+  --fond-chaud: #1a1610;
+  --rouge: #c43030;
+  --bleu-acier: #3a6080;
+  --laiton: #b89040;
+  --violet: #6a3a7a;
+  --creme: #d8ccb4;
+  --creme-chaud: #e8dcc0;
+  --bordeaux: #7a2830;
+  --gris: #6a6a70;
+  --surface: #16161e;
+  --surface-raised: #1e1e28;
+  --border: #2a2a35;
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  background: var(--fond);
+  color: var(--creme);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1, h2, h3 {
+  font-family: 'Oswald', 'Bebas Neue', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.display {
+  font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+  font-weight: 900;
+}
+
+.mono {
+  font-family: 'Share Tech Mono', 'Fira Code', monospace;
+}
+
+.serif-quote {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-style: italic;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+section:last-child { border-bottom: none; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; }
+
+/* ============================================
+   COVER PAGE
+   ============================================ */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--fond-chaud);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--laiton);
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(184,144,64,0.08) 0%, transparent 60%);
+}
+
+.cover-logo {
+  font-size: 80px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: var(--laiton);
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.cover-killer {
+  font-size: 96px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.2em;
+  color: var(--rouge);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.cover-subtitle {
+  font-size: 24px;
+  color: var(--creme-chaud);
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+.cover-tagline {
+  font-size: 18px;
+  color: var(--gris);
+  margin-bottom: 60px;
+}
+
+.cover-meta {
+  display: flex;
+  gap: 48px;
+  font-size: 14px;
+  color: var(--laiton);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cover-version {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  font-size: 12px;
+  color: var(--gris);
+}
+
+/* ============================================
+   TABLE OF CONTENTS
+   ============================================ */
+.toc {
+  background: var(--surface);
+  padding: 60px;
+  border-radius: 16px;
+  margin: 60px 0;
+}
+
+.toc-title {
+  font-size: 28px;
+  color: var(--laiton);
+  margin-bottom: 32px;
+}
+
+.toc-list {
+  list-style: none;
+  counter-reset: toc-counter;
+}
+
+.toc-list li {
+  counter-increment: toc-counter;
+  display: flex;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 16px;
+}
+
+.toc-list li::before {
+  content: counter(toc-counter, decimal-leading-zero);
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--laiton);
+  font-size: 14px;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.toc-list li span {
+  flex: 1;
+}
+
+.toc-list li .toc-page {
+  color: var(--gris);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+}
+
+/* ============================================
+   SECTION HEADERS
+   ============================================ */
+.section-number {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: var(--laiton);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 42px;
+  color: var(--creme);
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: var(--gris);
+  max-width: 700px;
+  margin-bottom: 48px;
+}
+
+h3 {
+  font-size: 22px;
+  color: var(--laiton);
+  margin: 40px 0 16px;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.card-prestige {
+  background: var(--surface);
+  border: 2px solid var(--laiton);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 0 24px rgba(184,144,64,0.12);
+  position: relative;
+}
+
+.card-prestige::after {
+  content: 'POPULAIRE';
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  background: var(--laiton);
+  color: var(--fond);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.card-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--creme);
+  margin-bottom: 8px;
+}
+
+.card-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-label {
+  font-size: 13px;
+  color: var(--gris);
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+}
+
+th {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--laiton);
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--laiton);
+}
+
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+tr:hover td { background: rgba(184,144,64,0.04); }
+
+.td-accent { color: var(--laiton); font-weight: 600; }
+.td-mono { font-family: 'Share Tech Mono', monospace; }
+.td-rouge { color: var(--rouge); }
+.td-vert { color: #4a9060; }
+.td-right { text-align: right; }
+
+/* ============================================
+   KPI BADGES
+   ============================================ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 32px 0;
+}
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.kpi-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--laiton);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: var(--gris);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.kpi-sub {
+  font-size: 11px;
+  color: var(--gris);
+  margin-top: 4px;
+}
+
+/* ============================================
+   CHART PLACEHOLDERS
+   ============================================ */
+.chart-placeholder {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+  color: var(--gris);
+  font-size: 14px;
+  margin: 24px 0;
+}
+
+.chart-placeholder .chart-title {
+  color: var(--laiton);
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Bar chart simulation */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  height: 200px;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar {
+  width: 100%;
+  max-width: 60px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s;
+}
+
+.bar-label {
+  font-size: 11px;
+  color: var(--gris);
+  text-align: center;
+}
+
+.bar-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--creme);
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+.timeline {
+  position: relative;
+  padding-left: 40px;
+  margin: 32px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 40px 24px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--laiton);
+  border: 2px solid var(--fond);
+}
+
+.timeline-date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--laiton);
+  margin-bottom: 4px;
+}
+
+.timeline-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--creme);
+  margin-bottom: 4px;
+}
+
+.timeline-desc {
+  font-size: 14px;
+  color: var(--gris);
+}
+
+/* ============================================
+   QUOTES
+   ============================================ */
+blockquote {
+  border-left: 3px solid var(--laiton);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: rgba(184,144,64,0.04);
+  border-radius: 0 8px 8px 0;
+}
+
+blockquote p {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--creme-chaud);
+}
+
+/* ============================================
+   BADGES & TAGS
+   ============================================ */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.badge-laiton { background: var(--laiton); color: var(--fond); }
+.badge-rouge { background: var(--rouge); color: white; }
+.badge-bleu { background: var(--bleu-acier); color: white; }
+.badge-violet { background: var(--violet); color: white; }
+.badge-outline { border: 1px solid var(--border); color: var(--gris); }
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--surface);
+  border-radius: 4px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--laiton), var(--creme-chaud));
+}
+
+/* ============================================
+   SEPARATOR & UTILITIES
+   ============================================ */
+.sep { height: 1px; background: var(--border); margin: 40px 0; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-48 { margin-top: 48px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-gris { color: var(--gris); }
+.text-laiton { color: var(--laiton); }
+.text-rouge { color: var(--rouge); }
+.text-bleu { color: var(--bleu-acier); }
+.text-sm { font-size: 13px; }
+.text-lg { font-size: 18px; }
+.fw-bold { font-weight: 700; }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.gap-8 { gap: 8px; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+
+/* Page break helper for PDF */

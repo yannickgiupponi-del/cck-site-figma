@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCK BP V3 — Plan Financier + Financement</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="page">       ============================================= -->
+  <section id="financier" class="page-break">
+    <div class="section-number">09</div>
+    <h2 class="section-title">Plan Financier Previsionnel</h2>
+    <p class="section-subtitle">Seuil de rentabilite a 315K&euro;/an (60% d'occupation). Marge nette de 30% a maturite.</p>
+
+    <h3>Projection 4 Ans &mdash; Scenario Reference</h3>
+    <table>
+      <thead>
+        <tr><th>Indicateur</th><th>2026 (4 mois)</th><th>2027</th><th>2028</th><th>2029</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="fw-bold">Chiffre d'affaires</td><td class="td-mono">~90K &euro;</td><td class="td-mono">464K &euro;</td><td class="td-mono fw-bold td-accent">642K &euro;</td><td class="td-mono fw-bold td-accent">642K &euro;</td></tr>
+        <tr><td class="fw-bold">Resultat net</td><td class="td-mono td-rouge">-21K &euro;</td><td class="td-mono td-vert">+92K &euro;</td><td class="td-mono td-vert fw-bold">+191K &euro;</td><td class="td-mono td-vert fw-bold">+191K &euro;</td></tr>
+        <tr><td>Marge nette</td><td class="td-mono text-gris">N/A</td><td class="td-mono">20%</td><td class="td-mono td-accent">30%</td><td class="td-mono td-accent">30%</td></tr>
+        <tr><td>EBITDA</td><td class="td-mono text-gris">&mdash;</td><td class="td-mono">&mdash;</td><td class="td-mono">&mdash;</td><td class="td-mono td-accent">279K &euro; (43%)</td></tr>
+        <tr><td>Occupation</td><td class="td-mono">30-40%</td><td class="td-mono">50-60%</td><td class="td-mono">60%</td><td class="td-mono">60%</td></tr>
+        <tr><td>Effectif</td><td class="td-mono">3-4</td><td class="td-mono">6-7</td><td class="td-mono">8-9</td><td class="td-mono">9-10</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Bar chart CA -->
+    <h3>Evolution du Chiffre d'Affaires</h3>
+    <div class="bar-chart">
+      <div class="bar-group">
+        <div class="bar-value">90K</div>
+        <div class="bar" style="height: 14%; background: var(--laiton);"></div>
+        <div class="bar-label">2026<br><span class="text-gris">(4 mois)</span></div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">464K</div>
+        <div class="bar" style="height: 72%; background: var(--laiton);"></div>
+        <div class="bar-label">2027</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">642K</div>
+        <div class="bar" style="height: 100%; background: linear-gradient(180deg, var(--laiton), #d4a94e);"></div>
+        <div class="bar-label">2028</div>
+      </div>
+      <div class="bar-group">
+        <div class="bar-value">642K</div>
+        <div class="bar" style="height: 100%; background: linear-gradient(180deg, var(--laiton), #d4a94e);"></div>
+        <div class="bar-label">2029</div>
+      </div>
+    </div>
+
+    <h3>3 Scenarios</h3>
+    <table>
+      <thead><tr><th>Scenario</th><th>Occupation Y3</th><th>CA Y3</th><th>Resultat Y3</th><th>ROE</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-outline">Prudent</span></td><td class="td-mono">40%</td><td class="td-mono">~428K &euro;</td><td class="td-mono">~75K &euro;</td><td class="td-mono">25%</td></tr>
+        <tr><td><span class="badge badge-laiton">Reference</span></td><td class="td-mono">60%</td><td class="td-mono">642K &euro;</td><td class="td-mono td-vert">191K &euro;</td><td class="td-mono td-accent">35%</td></tr>
+        <tr><td><span class="badge badge-rouge">Optimiste</span></td><td class="td-mono">80%</td><td class="td-mono">~856K &euro;</td><td class="td-mono td-vert">~310K &euro;</td><td class="td-mono td-accent">42%</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Seuil de Rentabilite</h3>
+    <div class="card">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="text-sm text-gris">Break-even annuel</div>
+          <div class="card-value text-laiton">315K &euro;</div>
+          <div class="text-sm text-gris">~60% d'occupation sur 12 mois</div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm text-gris">Marge brute</div>
+          <div class="card-value text-laiton">~96%</div>
+          <div class="text-sm text-gris">Cout marginal quasi nul</div>
+        </div>
+      </div>
+      <div class="mt-24">
+        <div class="text-sm text-gris mb-16">Progression vers le seuil (Annee 2)</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 100%;"></div>
+        </div>
+        <div class="flex justify-between text-sm text-gris mt-16">
+          <span>0 &euro;</span>
+          <span class="td-accent">315K &euro; &mdash; Seuil atteint</span>
+          <span>464K &euro; CA reel</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       10 — FINANCEMENT
+       ============================================= -->
+  <section id="financement" class="page-break">
+    <div class="section-number">10</div>
+    <h2 class="section-title">Plan de Financement</h2>
+    <p class="section-subtitle">227K&euro; repartis entre equity, dette et aides. Investissement initial de 150K&euro; TTC.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Sources de Financement</h3>
+        <table>
+          <thead><tr><th>Source</th><th>Montant</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>Apport fondateurs</td><td class="td-mono">31K &euro;</td><td><span class="badge badge-laiton">Equity</span></td></tr>
+            <tr><td>Investisseurs externes</td><td class="td-mono">100K &euro;</td><td><span class="badge badge-laiton">Equity</span></td></tr>
+            <tr><td>Pret bancaire</td><td class="td-mono">60K &euro;</td><td><span class="badge badge-bleu">Dette</span></td></tr>
+            <tr><td>Crowdfunding (Ulule)</td><td class="td-mono">6K &euro;</td><td><span class="badge badge-violet">Crowd</span></td></tr>
+            <tr><td>Aides a l'entrepreneuriat</td><td class="td-mono">30K &euro;</td><td><span class="badge badge-outline">Grant</span></td></tr>
+            <tr class="fw-bold"><td>Total</td><td class="td-mono td-accent">227K &euro;</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Emploi des Fonds (150K&euro; TTC)</h3>
+        <table>
+          <thead><tr><th>Poste</th><th>TTC</th><th>Amort.</th></tr></thead>
+          <tbody>
+            <tr><td>Renovation du site</td><td class="td-mono">70K &euro;</td><td class="text-gris">10 ans</td></tr>
+            <tr><td>Scenographie &amp; decors</td><td class="td-mono">25K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Equipement technique</td><td class="td-mono">10K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Equipement de jeu</td><td class="td-mono">3K &euro;</td><td class="text-gris">3 ans</td></tr>
+            <tr><td>Mobilier &amp; lobby</td><td class="td-mono">25K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Securite &amp; conformite</td><td class="td-mono">10K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr><td>Divers &amp; imprevus</td><td class="td-mono">7K &euro;</td><td class="text-gris">5 ans</td></tr>
+            <tr class="fw-bold"><td>Total investissement</td><td class="td-mono td-accent">150K &euro;</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Charges Fixes Mensuelles</h3>
+    <table>
+      <thead><tr><th>Poste</th><th>Mensuel HT</th><th>Annuel HT</th></tr></thead>
+      <tbody>
+        <tr><td>Loyer</td><td class="td-mono">10 000 &euro;</td><td class="td-mono">120 000 &euro;</td></tr>
+        <tr><td>Salaires (par employe)</td><td class="td-mono">2 169 &euro;</td><td class="td-mono text-gris">x effectif</td></tr>
+        <tr><td>Marketing &amp; Google Ads</td><td class="td-mono">3 417 &euro;</td><td class="td-mono">41 000 &euro;</td></tr>
+        <tr><td>Electricite</td><td class="td-mono">1 250 &euro;</td><td class="td-mono">15 000 &euro;</td></tr>
+        <tr><td>Assurance</td><td class="td-mono">417 &euro;</td><td class="td-mono">5 000 &euro;</td></tr>
+        <tr><td>Securite + Nettoyage</td><td class="td-mono">834 &euro;</td><td class="td-mono">10 000 &euro;</td></tr>
+        <tr><td>Admin + Banque + Telecom</td><td class="td-mono">609 &euro;</td><td class="td-mono">7 300 &euro;</td></tr>
+        <tr><td>Infra digitale</td><td class="td-mono">~400 &euro;</td><td class="td-mono">~5 000 &euro;</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- =============================================
+       11 — MARKETING</div>
+</body>
+</html>
