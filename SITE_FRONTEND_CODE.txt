@@ -1,0 +1,4853 @@
+# =============================================
+# CACHE CACHE KILLER — Site Frontend Code
+# Export pour Figma — 2026-02-20
+# =============================================
+
+# Structure: Next.js 15 App Router
+# Framework: React 18 + Tailwind CSS v4
+# Fonts: Bodoni Moda (display), Oswald (heading), DM Sans (body), Share Tech Mono, Crimson Text (serif)
+# Palette V3 Cirque Delave:
+#   fond: #0d0d12 | rouge: #c43030 | bleu-acier: #3a6080
+#   laiton: #b89040 | violet: #6a3a7a | creme: #d8ccb4
+#   accueil chaud: fond #1a1610, laiton #b89040, bordeaux #7a2830, creme-chaud #e8dcc0
+
+=====================================
+FILE: apps/site/src/app/globals.css
+=====================================
+@import "tailwindcss";
+@import "@cck/ui/tokens";
+
+
+=====================================
+FILE: apps/site/src/app/layout.tsx
+=====================================
+import type { Metadata } from 'next'
+import Script from 'next/script'
+import {
+  Bodoni_Moda,
+  Oswald,
+  DM_Sans,
+  Share_Tech_Mono,
+  Crimson_Text,
+} from 'next/font/google'
+import { SiteHeader } from '@/components/header'
+import { SiteFooter } from '@/components/footer'
+import { SkipNav, SvgFilters } from '@cck/ui'
+import './globals.css'
+
+/* ============================================
+   FONTS — next/font/google (self-hosted, no CLS)
+   ============================================ */
+
+const bodoniModa = Bodoni_Moda({
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-heading',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-body',
+  display: 'swap',
+})
+
+const shareTechMono = Share_Tech_Mono({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-mono',
+  display: 'swap',
+})
+
+const crimsonText = Crimson_Text({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+  display: 'swap',
+})
+
+/* ============================================
+   METADATA
+   ============================================ */
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://cachecachekiller.fr'),
+  title: {
+    template: '%s | Cache Cache Killer',
+    default: 'Cache Cache Killer — Survival Grandeur Nature',
+  },
+  description:
+    'Cache Cache Killer : un jeu de survie grandeur nature dans un cirque que le temps a oublié. 2 à 10 joueurs, 20 min par session, dès 12 ans. Ouverture octobre 2026 en Essonne.',
+  keywords: [
+    'survival grandeur nature',
+    'jeu de survie',
+    'cache cache killer',
+    'team building essonne',
+    'activité groupe paris',
+    'dead by daylight réel',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'Cache Cache Killer',
+  },
+  twitter: { card: 'summary_large_image' },
+  robots: { index: true, follow: true },
+  alternates: { canonical: 'https://cachecachekiller.fr' },
+}
+
+/* ============================================
+   JSON-LD STRUCTURED DATA — EntertainmentBusiness schema
+   ============================================ */
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EntertainmentBusiness',
+  name: 'Cache Cache Killer',
+  description:
+    'Jeu de survie grandeur nature inspiré de Dead by Daylight — Survivants vs Tueurs dans une arène de 500m²',
+  url: 'https://cachecachekiller.fr',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Essonne',
+    addressRegion: 'Île-de-France',
+    addressCountry: 'FR',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Wednesday', 'Thursday', 'Friday'],
+      opens: '14:00',
+      closes: '22:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '10:00',
+      closes: '23:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Sunday',
+      opens: '10:00',
+      closes: '20:00',
+    },
+  ],
+  priceRange: 'EUR 12-18',
+}
+
+/* ============================================
+   ROOT LAYOUT
+   ============================================ */
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html
+      lang="fr"
+      className={[
+        bodoniModa.variable,
+        oswald.variable,
+        dmSans.variable,
+        shareTechMono.variable,
+        crimsonText.variable,
+      ].join(' ')}
+    >
+      <body
+        data-palette="accueil"
+        className="min-h-screen bg-surface-base font-body text-text-primary antialiased"
+      >
+        <SkipNav />
+        <SvgFilters />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <SiteHeader />
+        <main id="main-content" className="flex min-h-[calc(100vh-4rem)] flex-col">
+          {children}
+        </main>
+        <SiteFooter />
+        <Script
+          defer
+          data-domain="cachecachekiller.fr"
+          src="https://plausible.io/js/script.js"
+          strategy="afterInteractive"
+        />
+      </body>
+    </html>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/page.tsx
+=====================================
+import Link from 'next/link'
+import {
+  CckLogo,
+  SmokeBackground,
+  AtmosphericSection,
+  VersusSection,
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@cck/ui'
+import { FadeInSection } from '../components/fade-in-section'
+import { getTopPlayers } from '@/lib/dal/leaderboard'
+
+/* ============================================
+   HOME PAGE — Async Server Component
+   Moodboard Section 8 "Digital" blueprint
+   ============================================ */
+
+export default async function HomePage() {
+  // Fetch top 3 for podium preview — returns [] on error (pre-launch / DB unavailable)
+  const topPlayers = await getTopPlayers(3)
+  return (
+    <>
+      {/* ============================================
+          1. HERO — Full viewport
+          ============================================ */}
+      <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-20 text-center">
+        {/* Atmospheric smoke behind everything */}
+        <SmokeBackground variant="accueil" />
+
+        <FadeInSection>
+          {/* Tagline */}
+          <p className="mb-6 font-mono text-xs uppercase tracking-[5px] text-[var(--color-gold-500)]">
+            <span aria-hidden="true">&#9670; </span>
+            LE CIRQUE OUVRE SES PORTES
+            <span aria-hidden="true"> &#9670;</span>
+          </p>
+
+          {/* Logo */}
+          <CckLogo variant="full" size="xl" />
+
+          {/* Subtitle */}
+          <p className="mt-8 max-w-lg font-serif text-lg italic text-text-primary sm:text-xl">
+            Un jeu de survie grandeur nature dans un cirque que le temps a
+            oubli&eacute;.
+          </p>
+
+          {/* Info line */}
+          <p className="mt-4 font-mono text-sm text-text-secondary">
+            2 &agrave; 10 joueurs &middot; 20 min / partie &middot; D&egrave;s 12
+            ans &middot; Essonne
+          </p>
+
+          {/* CTAs — Rule 3: 1 primary visible, 1 secondary */}
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+            <Link href="/reserver" prefetch={true}>
+              <Button variant="danger" size="lg">
+                R&Eacute;SERVER UNE SESSION
+              </Button>
+            </Link>
+
+            <Link href="/concept" prefetch={true}>
+              <Button variant="secondary" size="lg">
+                D&Eacute;COUVRIR L&rsquo;AR&Egrave;NE
+              </Button>
+            </Link>
+          </div>
+        </FadeInSection>
+
+        {/* Gradient laiton separator at bottom */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-gold-500)] to-transparent"
+        />
+      </section>
+
+      {/* ============================================
+          2. THREE CARDS SECTION
+          ============================================ */}
+      <AtmosphericSection
+        subtitle="L'ARENE VOUS ATTEND"
+        separator
+        stripes
+      >
+        <FadeInSection delay={100}>
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Card 1 — L'experience (blue-acier accent) */}
+            <Card
+              className="border-l-4 border-l-[var(--color-blue-500)] hover:shadow-[var(--shadow-card-hover)] transition-shadow"
+              hoverable
+            >
+              <CardHeader eyebrow="L'experience">
+                <CardTitle>Survivez &agrave; l&rsquo;ar&egrave;ne</CardTitle>
+              </CardHeader>
+              <CardContent className="mt-3">
+                <p className="text-text-secondary">
+                  Courez, cachez-vous, activez les
+                  g&eacute;n&eacute;rateurs. Survivez &agrave;
+                  l&rsquo;ar&egrave;ne.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Card 2 — Deux camps (red accent) */}
+            <Card
+              className="border-l-4 border-l-[var(--color-red-500)] hover:shadow-[var(--shadow-card-hover)] transition-shadow"
+              hoverable
+            >
+              <CardHeader eyebrow="Deux camps">
+                <CardTitle>Survivants ou Tueur</CardTitle>
+              </CardHeader>
+              <CardContent className="mt-3">
+                <p className="text-text-secondary">
+                  Survivants ou Tueur — chaque camp vit l&rsquo;ar&egrave;ne
+                  diff&eacute;remment.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Card 3 — Le cirque (gold accent) */}
+            <Card
+              className="border-l-4 border-l-[var(--color-gold-500)] hover:shadow-[var(--shadow-card-hover)] transition-shadow sm:col-span-2 lg:col-span-1"
+              hoverable
+            >
+              <CardHeader eyebrow="Le cirque">
+                <CardTitle>Un lieu hors du temps</CardTitle>
+              </CardHeader>
+              <CardContent className="mt-3">
+                <p className="text-text-secondary">
+                  Un lieu hors du temps, entre spectacle et terreur.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </FadeInSection>
+      </AtmosphericSection>
+
+      {/* ============================================
+          3. VERSUS SECTION
+          ============================================ */}
+      <AtmosphericSection subtitle="CHOISISSEZ VOTRE CAMP" separator>
+        <FadeInSection delay={200}>
+          <VersusSection />
+        </FadeInSection>
+      </AtmosphericSection>
+
+      {/* ============================================
+          4. CLASSEMENT PREVIEW
+          ============================================ */}
+      <AtmosphericSection subtitle="LE CLASSEMENT" separator stripes>
+        <FadeInSection delay={100}>
+        <div className="mx-auto max-w-3xl text-center">
+          <h2 className="font-display text-2xl font-bold text-text-primary sm:text-3xl">
+            Les meilleurs joueurs du mois
+          </h2>
+
+          {/* Podium preview — real data when available, dash placeholder otherwise */}
+          <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row sm:items-end sm:gap-8">
+            {/* 2nd place — Silver */}
+            <div className="order-2 flex flex-col items-center gap-3 sm:order-1">
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#a0a0a0] bg-surface-raised text-xl font-display font-bold text-text-primary"
+                aria-label="Deuxieme place"
+              >
+                2
+              </div>
+              <div className="h-20 w-24 rounded-t-lg bg-gradient-to-t from-[#a0a0a0]/20 to-[#a0a0a0]/5 sm:h-24" />
+              <span className="font-heading text-sm font-medium text-text-secondary">
+                {topPlayers[1]?.pseudo ?? <span aria-label="Non attribue">&mdash;</span>}
+              </span>
+            </div>
+
+            {/* 1st place — Gold */}
+            <div className="order-1 flex flex-col items-center gap-3 sm:order-2">
+              <div
+                className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[var(--color-gold-500)] bg-surface-raised text-2xl font-display font-bold text-[var(--color-gold-500)]"
+                style={{
+                  boxShadow: '0 0 20px rgba(184, 144, 64, 0.3)',
+                }}
+                aria-label="Premiere place"
+              >
+                1
+              </div>
+              <div className="h-28 w-28 rounded-t-lg bg-gradient-to-t from-[var(--color-gold-500)]/20 to-[var(--color-gold-500)]/5 sm:h-32" />
+              <span className="font-heading text-sm font-medium text-[var(--color-gold-500)]">
+                {topPlayers[0]?.pseudo ?? <span aria-label="Non attribue">&mdash;</span>}
+              </span>
+            </div>
+
+            {/* 3rd place — Bronze */}
+            <div className="order-3 flex flex-col items-center gap-3">
+              <div
+                className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#cd7f32] bg-surface-raised text-xl font-display font-bold text-text-primary"
+                aria-label="Troisieme place"
+              >
+                3
+              </div>
+              <div className="h-16 w-24 rounded-t-lg bg-gradient-to-t from-[#cd7f32]/20 to-[#cd7f32]/5 sm:h-20" />
+              <span className="font-heading text-sm font-medium text-text-secondary">
+                {topPlayers[2]?.pseudo ?? <span aria-label="Non attribue">&mdash;</span>}
+              </span>
+            </div>
+          </div>
+
+          <Link
+            href="/classement"
+            prefetch={true}
+            className="mt-10 inline-flex min-h-[48px] items-center font-heading text-sm font-medium text-text-accent underline underline-offset-4 transition-colors duration-150 hover:text-[var(--color-gold-400)] focus-visible:focus-ring rounded-sm"
+          >
+            Voir le classement complet &rarr;
+          </Link>
+        </div>
+        </FadeInSection>
+      </AtmosphericSection>
+
+      {/* ============================================
+          5. BOTTOM CTA
+          ============================================ */}
+      <AtmosphericSection separator className="text-center">
+        <FadeInSection delay={200}>
+          <div className="mx-auto flex max-w-xl flex-col items-center gap-8">
+            <h2 className="font-display text-3xl font-bold italic text-text-primary sm:text-4xl">
+              L&rsquo;ar&egrave;ne vous attend.
+            </h2>
+
+            <Link href="/reserver" prefetch={true}>
+              <Button variant="danger" size="lg">
+                R&Eacute;SERVER UNE SESSION
+              </Button>
+            </Link>
+          </div>
+        </FadeInSection>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/loading.tsx
+=====================================
+import { Skeleton, SkeletonText, SkeletonCard } from '@cck/ui'
+
+/**
+ * Site loading skeleton — Rule 10: Skeleton > Spinner.
+ * Matches typical site page layout: hero + content cards.
+ * Rule 5: animate-pulse respects prefers-reduced-motion via Tailwind defaults.
+ */
+export default function SiteLoading() {
+  return (
+    <main className="flex flex-col" aria-busy="true" aria-label="Chargement de la page">
+      {/* Hero skeleton */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 sm:py-20">
+        {/* Eyebrow */}
+        <Skeleton className="h-4 w-24" />
+        {/* Title */}
+        <Skeleton className="h-12 w-72 sm:h-14 sm:w-96" />
+        {/* Subtitle */}
+        <Skeleton className="h-5 w-64 sm:w-80" />
+      </section>
+
+      {/* Content skeletons */}
+      <section className="px-4 pb-16">
+        <div className="mx-auto max-w-4xl">
+          {/* Text block */}
+          <div className="mb-10">
+            <SkeletonText lines={4} />
+          </div>
+
+          {/* Card grid */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/error.tsx
+=====================================
+'use client'
+
+import { useEffect } from 'react'
+import * as Sentry from '@sentry/nextjs'
+import Link from 'next/link'
+import { Button } from '@cck/ui'
+
+export default function SiteError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  useEffect(() => {
+    // Log the error to an error reporting service
+    console.error('[site] Unhandled error:', error)
+    Sentry.captureException(error)
+  }, [error])
+
+  return (
+    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center">
+      {/* Error icon — Rule 9: icon + text, never color alone */}
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-feedback-danger-border bg-feedback-danger-bg">
+        <svg
+          className="h-8 w-8 text-feedback-danger-text"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fillRule="evenodd"
+            d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.168 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
+
+      <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl">
+        Une erreur est survenue
+      </h1>
+
+      {error.message && (
+        <p className="max-w-md text-sm text-text-muted">
+          {error.message}
+        </p>
+      )}
+
+      <p className="max-w-md text-text-secondary">
+        Nous nous excusons pour la gene occasionnee. Vous pouvez
+        reessayer ou retourner a l&apos;accueil.
+      </p>
+
+      {/* Actions — Rule 1: 48px touch targets, Rule 3: 1 primary CTA */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={reset}
+        >
+          Reessayer
+        </Button>
+
+        <Link href="/">
+          <Button variant="ghost" size="lg">
+            Retour a l&apos;accueil
+          </Button>
+        </Link>
+      </div>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/not-found.tsx
+=====================================
+import Link from 'next/link'
+import { Button } from '@cck/ui'
+
+export default function NotFound() {
+  return (
+    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center">
+      <p className="font-heading text-lg uppercase tracking-wider text-text-accent">
+        Erreur 404
+      </p>
+
+      <h1 className="font-display text-5xl font-black text-text-primary sm:text-6xl">
+        Page introuvable
+      </h1>
+
+      <p className="max-w-md font-body text-text-secondary">
+        Cette page n&apos;existe pas ou a ete deplacee.
+        Explorez nos autres pages pour continuer votre aventure.
+      </p>
+
+      {/* Rule 3: 1 seul CTA primaire visible — primary + ghost max */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <Link href="/">
+          <Button variant="primary" size="lg">
+            Retour a l&apos;accueil
+          </Button>
+        </Link>
+
+        <Link href="/tarifs">
+          <Button variant="ghost" size="lg">
+            Voir les tarifs
+          </Button>
+        </Link>
+      </div>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/concept/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { AtmosphericSection, SmokeBackground, Button, Card, CardContent } from '@cck/ui'
+
+export const metadata: Metadata = {
+  title: "L'Exp\u00e9rience",
+  description:
+    "D\u00e9couvrez Cache Cache Killer : un jeu de survie grandeur nature avec Survivants vs Tueurs dans une ar\u00e8ne de 500m\u00b2. Phase de Pr\u00e9paration + Phase d'Extraction.",
+  alternates: { canonical: 'https://cachecachekiller.fr/concept' },
+}
+
+/* ============================================
+   INLINE SVG ICONS
+   ============================================ */
+
+function GeneratorIcon() {
+  return (
+    <svg
+      className="h-6 w-6 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      aria-hidden="true"
+    >
+      <rect x="3" y="6" width="18" height="12" rx="2" className="stroke-[var(--color-blue-500)]" />
+      <path d="M12 6v12" className="stroke-[var(--color-blue-500)]" />
+      <circle cx="8" cy="12" r="2" className="stroke-[var(--color-blue-500)]" />
+      <path d="M15 9l2 3-2 3" className="stroke-[var(--color-blue-500)]" />
+    </svg>
+  )
+}
+
+function SkullIcon() {
+  return (
+    <svg
+      className="h-6 w-6 shrink-0"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="10" r="7" className="stroke-[var(--color-red-500)]" />
+      <circle cx="9" cy="9" r="1.5" className="fill-[var(--color-red-500)]/20 stroke-[var(--color-red-500)]" />
+      <circle cx="15" cy="9" r="1.5" className="fill-[var(--color-red-500)]/20 stroke-[var(--color-red-500)]" />
+      <path d="M10 14h4" className="stroke-[var(--color-red-500)]" />
+      <path d="M12 17v3M10 20h4" className="stroke-[var(--color-red-500)]" />
+    </svg>
+  )
+}
+
+function CheckIcon({ className = 'h-5 w-5' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+function StarIcon() {
+  return (
+    <svg className="h-5 w-5 shrink-0 text-[var(--color-gold-500)]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  )
+}
+
+/* ============================================
+   KEY STATS
+   ============================================ */
+
+const KEY_STATS = [
+  { value: '2\u201310', label: 'joueurs' },
+  { value: '20', label: 'minutes' },
+  { value: '12+', label: 'ans minimum' },
+  { value: '500m\u00b2', label: "d'ar\u00e8ne" },
+] as const
+
+/* ============================================
+   PHASE 1 FEATURES
+   ============================================ */
+
+const PHASE_1_FEATURES = [
+  'Les Survivants doivent activer les g\u00e9n\u00e9rateurs diss\u00e9min\u00e9s dans l\u2019ar\u00e8ne.',
+  'Le Tueur les traque \u00e0 l\u2019aide de sa lampe infrarouge.',
+  'Touch\u00e9 ? Vous \u00eates bless\u00e9. Rejoignez une borne de soin pour vous soigner \u2014 mais attention, les g\u00e9n\u00e9rateurs proches disjonctent.',
+  'Le Tueur dispose de munitions limit\u00e9es et d\u2019un effet snowball.',
+] as const
+
+const PHASE_2_FEATURES = [
+  'Les Survivants doivent maintenir les boutons d\u2019extraction dans le bon ordre.',
+  'Le Tueur devient mortel : un toucher signifie l\u2019\u00e9limination d\u00e9finitive.',
+  'Les \u00e9limin\u00e9s quittent l\u2019ar\u00e8ne. Les survivants restants tentent l\u2019extraction finale.',
+] as const
+
+const ARENA_FEATURES = [
+  '500m\u00b2 d\u2019espaces modulables',
+  '\u00c9clairage dynamique, ambiance sonore immersive',
+  'G\u00e9n\u00e9rateurs physiques interactifs, bornes de soin, gilets infrarouges',
+  'Z\u00e9ro \u00e9cran \u2014 tout est tangible',
+] as const
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function ConceptPage() {
+  return (
+    <main className="flex flex-col">
+      {/* Hero section */}
+      <section className="relative flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 py-20 text-center sm:py-28">
+        <SmokeBackground variant="duality" />
+        <h1 className="font-display text-4xl font-black uppercase tracking-wider text-text-primary sm:text-5xl md:text-6xl">
+          L&apos;Exp&eacute;rience
+        </h1>
+        <p className="max-w-2xl font-serif text-lg italic text-[var(--color-cream-500)] sm:text-xl">
+          Un jeu de survie grandeur nature dans un cirque que le temps a oubli&eacute;.
+        </p>
+      </section>
+
+      {/* Section: Le Concept */}
+      <AtmosphericSection subtitle="LE JEU" separator stripes id="concept">
+        <div className="mx-auto max-w-3xl space-y-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            Le Concept
+          </h2>
+          <div className="space-y-4 text-text-primary leading-relaxed">
+            <p>
+              Cache Cache Killer est un <strong className="text-[var(--color-gold-500)]">survival grandeur nature</strong> inspir&eacute;
+              de Dead by Daylight, Friday the 13th et Among Us.
+            </p>
+            <p>
+              Dans une ar&egrave;ne de 500m&sup2;, deux camps s&apos;affrontent : les <strong className="text-[var(--color-blue-500)]">Survivants</strong> et
+              le <strong className="text-[var(--color-red-500)]">Tueur</strong>.
+            </p>
+            <p>
+              Pas d&apos;&eacute;cran, pas de r&eacute;alit&eacute; virtuelle &mdash; tout est physique, tangible, visc&eacute;ral.
+            </p>
+          </div>
+
+          {/* Key stats */}
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {KEY_STATS.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center gap-1 rounded-lg border border-[var(--color-gold-300)] bg-[var(--color-surface-recessed)] p-4"
+              >
+                <span className="font-display text-2xl font-black text-[var(--color-gold-500)]">
+                  {stat.value}
+                </span>
+                <span className="text-xs uppercase tracking-wider text-text-secondary">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* Section: Les Deux Phases */}
+      <AtmosphericSection subtitle="LE D&Eacute;ROULEMENT" separator id="phases" className="bg-[var(--color-surface-recessed)]">
+        <div className="mx-auto max-w-4xl space-y-10">
+          <h2 className="text-center font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            Les Deux Phases
+          </h2>
+
+          {/* Phase 1 — Pr&eacute;paration */}
+          <Card variant="survivor" className="overflow-hidden">
+            <CardContent className="flex flex-col gap-4 p-6 sm:p-8">
+              <div className="flex items-center gap-3">
+                <GeneratorIcon />
+                <div>
+                  <span className="text-xs font-heading uppercase tracking-wider text-[var(--color-blue-500)]">
+                    Phase 1
+                  </span>
+                  <h3 className="font-heading text-xl font-bold text-[var(--color-blue-500)] sm:text-2xl">
+                    Pr&eacute;paration
+                  </h3>
+                </div>
+              </div>
+
+              {/* Rule 9: icon + text, never color alone */}
+              <ul className="flex flex-col gap-3" role="list">
+                {PHASE_1_FEATURES.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-text-primary">
+                    <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-blue-500)]" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-2 flex items-center gap-2 rounded-md bg-[var(--color-blue-500)]/10 px-4 py-2">
+                <svg className="h-5 w-5 shrink-0 text-[var(--color-blue-500)]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-[var(--color-blue-500)]">
+                  Dur&eacute;e : 15 minutes
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Phase 2 — Extraction */}
+          <Card variant="killer" className="overflow-hidden">
+            <CardContent className="flex flex-col gap-4 p-6 sm:p-8">
+              <div className="flex items-center gap-3">
+                <SkullIcon />
+                <div>
+                  <span className="text-xs font-heading uppercase tracking-wider text-[var(--color-red-500)]">
+                    Phase 2
+                  </span>
+                  <h3 className="font-heading text-xl font-bold text-[var(--color-red-500)] sm:text-2xl">
+                    Extraction
+                  </h3>
+                </div>
+              </div>
+
+              {/* Rule 9: icon + text, never color alone */}
+              <ul className="flex flex-col gap-3" role="list">
+                {PHASE_2_FEATURES.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-text-primary">
+                    <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-red-500)]" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-2 flex items-center gap-2 rounded-md bg-[var(--color-red-500)]/10 px-4 py-2">
+                <svg className="h-5 w-5 shrink-0 text-[var(--color-red-500)]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm font-medium text-[var(--color-red-500)]">
+                  Dur&eacute;e : temps restant + bonus
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </AtmosphericSection>
+
+      {/* Section: L'Ar&egrave;ne */}
+      <AtmosphericSection subtitle="LE LIEU" separator stripes id="arene">
+        <div className="mx-auto max-w-3xl space-y-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            L&apos;Ar&egrave;ne
+          </h2>
+          <ul className="mx-auto flex max-w-xl flex-col gap-4 text-left" role="list">
+            {ARENA_FEATURES.map((feature) => (
+              <li key={feature} className="flex items-start gap-3 text-text-primary">
+                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-gold-500)]" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </AtmosphericSection>
+
+      {/* Section: Playtests */}
+      <AtmosphericSection subtitle="CE QU&apos;ILS EN DISENT" separator id="playtests" className="bg-[var(--color-surface-recessed)]">
+        <div className="mx-auto max-w-3xl space-y-8 text-center">
+          <h2 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            Retours Playtests
+          </h2>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {/* Stat: Recommendation */}
+            <div className="flex flex-col items-center gap-2 rounded-lg border border-[var(--color-gold-300)] bg-[var(--color-surface-raised)] p-6">
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <StarIcon key={i} />
+                ))}
+              </div>
+              <span className="font-display text-3xl font-black text-[var(--color-gold-500)]">
+                100%
+              </span>
+              <span className="text-sm text-text-secondary">de recommandation</span>
+            </div>
+
+            {/* Stat: Fun score */}
+            <div className="flex flex-col items-center gap-2 rounded-lg border border-[var(--color-gold-300)] bg-[var(--color-surface-raised)] p-6">
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <StarIcon key={i} />
+                ))}
+              </div>
+              <span className="font-display text-3xl font-black text-[var(--color-gold-500)]">
+                4.8/5
+              </span>
+              <span className="text-sm text-text-secondary">score amusement</span>
+            </div>
+          </div>
+
+          <p className="text-text-secondary">
+            Test&eacute; et approuv&eacute; par plus de 200 joueurs en conditions r&eacute;elles.
+          </p>
+        </div>
+      </AtmosphericSection>
+
+      {/* CTA section — Rule 3: 1 seul CTA primaire visible */}
+      <AtmosphericSection separator>
+        <div className="flex flex-col items-center gap-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            Pr&ecirc;t &agrave; entrer dans l&apos;ar&egrave;ne ?
+          </h2>
+          <p className="max-w-lg text-text-secondary">
+            R&eacute;servez votre session et d&eacute;couvrez le Cirque D&eacute;lav&eacute;.
+            Serez-vous Survivant ou Tueur ? Le camp se choisit sur place.
+          </p>
+          <Link href="/reserver">
+            <Button variant="primary" size="lg">
+              R&Eacute;SERVER UNE SESSION
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/a-propos/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import {
+  AtmosphericSection,
+  SmokeBackground,
+  DistressedFrame,
+  Button,
+} from '@cck/ui'
+
+/** ISR: revalidate every 24 hours (about page rarely changes) */
+export const revalidate = 86400
+
+export const metadata: Metadata = {
+  title: '\u00c0 Propos',
+  description:
+    'D\u00e9couvrez l\u2019\u00e9quipe derri\u00e8re Cache Cache Killer : Olivier Giupponi, Mathieu Sardin et Yannick Giupponi.',
+  alternates: { canonical: 'https://cachecachekiller.fr/a-propos' },
+}
+
+/* ============================================
+   FOUNDERS DATA
+   ============================================ */
+
+interface Founder {
+  initials: string
+  name: string
+  title: string
+  description: string
+}
+
+const FOUNDERS: Founder[] = [
+  {
+    initials: 'OG',
+    name: 'Olivier Giupponi',
+    title: 'Pr\u00e9sident & Directeur Cr\u00e9atif',
+    description:
+      'Game designer dipl\u00f4m\u00e9 de l\u2019ENJMIN et des Gobelins, Olivier con\u00e7oit les m\u00e9caniques de jeu et l\u2019univers visuel de Cache Cache Killer.',
+  },
+  {
+    initials: 'MS',
+    name: 'Mathieu Sardin',
+    title: 'Directeur G\u00e9n\u00e9ral',
+    description:
+      'Artisan et b\u00e2tisseur, Mathieu supervise l\u2019am\u00e9nagement de l\u2019ar\u00e8ne et l\u2019exploitation quotidienne.',
+  },
+  {
+    initials: 'YG',
+    name: 'Yannick Giupponi',
+    title: 'Directeur Financier & Strat\u00e9gique',
+    description:
+      'Consultant en strat\u00e9gie, Yannick pilote la vision financi\u00e8re et le d\u00e9veloppement de CCK.',
+  },
+]
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function AProposPage() {
+  return (
+    <>
+      {/* ============================================
+          HERO
+          ============================================ */}
+      <section className="relative flex flex-col items-center gap-4 overflow-hidden px-4 py-16 text-center sm:py-20">
+        <SmokeBackground variant="accueil" />
+        <p className="font-heading text-sm uppercase tracking-widest text-text-accent">
+          Le Cirque de Minuit &mdash; Notre histoire
+        </p>
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl md:text-6xl">
+          &Agrave; PROPOS
+        </h1>
+      </section>
+
+      {/* ============================================
+          NOTRE HISTOIRE
+          ============================================ */}
+      <AtmosphericSection subtitle="L'ORIGINE" separator stripes>
+        <div className="mx-auto max-w-3xl">
+          <div className="flex flex-col gap-6 font-serif text-lg italic leading-relaxed text-text-primary">
+            <p>
+              Cache Cache Killer est n&eacute; d&apos;une passion commune pour
+              le game design, l&apos;artisanat et la strat&eacute;gie.
+            </p>
+            <p>
+              Trois associ&eacute;s, trois visions compl&eacute;mentaires, un
+              m&ecirc;me objectif : cr&eacute;er une exp&eacute;rience de jeu
+              grandeur nature qui n&apos;existe nulle part ailleurs.
+            </p>
+            <p>
+              Inspir&eacute; des m&eacute;caniques de{' '}
+              <span className="font-semibold not-italic text-text-accent">
+                Dead by Daylight
+              </span>{' '}
+              et de l&apos;&eacute;nergie du spectacle vivant, CCK transforme un
+              espace de 500m&sup2; en ar&egrave;ne o&ugrave; tout est physique,
+              tangible, immersif.
+            </p>
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          L'EQUIPE
+          ============================================ */}
+      <AtmosphericSection subtitle="LES FONDATEURS" separator>
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {FOUNDERS.map((founder) => (
+            <DistressedFrame
+              key={founder.initials}
+              caption={`${founder.name} \u2014 ${founder.title}`}
+              className="w-full"
+            >
+              <div className="flex flex-col items-center gap-4 p-6">
+                {/* Placeholder image — gray with initials */}
+                <div
+                  className="flex h-24 w-24 items-center justify-center rounded-full bg-night-300 text-2xl font-display font-bold text-text-primary"
+                  aria-label={`Photo de ${founder.name}`}
+                >
+                  {founder.initials}
+                </div>
+                <div className="text-center">
+                  <h3 className="font-heading text-lg font-bold text-text-primary">
+                    {founder.name}
+                  </h3>
+                  <p className="mt-1 font-heading text-xs uppercase tracking-wider text-text-accent">
+                    {founder.title}
+                  </p>
+                </div>
+                <p className="text-center text-sm leading-relaxed text-text-secondary">
+                  {founder.description}
+                </p>
+              </div>
+            </DistressedFrame>
+          ))}
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          NOTRE VISION
+          ============================================ */}
+      <AtmosphericSection subtitle="NOTRE VISION" separator stripes>
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="flex flex-col gap-6 font-serif text-lg italic leading-relaxed text-text-primary">
+            <p>
+              Nous croyons que le jeu physique cr&eacute;e des &eacute;motions
+              que le num&eacute;rique ne peut pas reproduire.
+            </p>
+            <p className="font-semibold text-text-accent">
+              CCK, c&apos;est le retour du frisson &mdash; sans &eacute;cran,
+              sans filtre.
+            </p>
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          CTA — Rule 3: 1 single primary CTA
+          ============================================ */}
+      <AtmosphericSection separator className="text-center">
+        <div className="mx-auto flex max-w-xl flex-col items-center gap-6">
+          <h2 className="font-display text-2xl font-bold italic text-text-primary sm:text-3xl">
+            D&eacute;couvrir l&apos;exp&eacute;rience
+          </h2>
+          <p className="text-text-secondary">
+            Plongez dans l&apos;univers du Cirque D&eacute;lav&eacute; et
+            d&eacute;couvrez ce qui vous attend dans l&apos;ar&egrave;ne.
+          </p>
+          <Link href="/concept">
+            <Button variant="primary" size="lg">
+              D&Eacute;COUVRIR LE CONCEPT
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/tarifs/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import {
+  AtmosphericSection,
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from '@cck/ui'
+
+/** ISR: revalidate every hour (pricing can change moderately often) */
+export const revalidate = 3600
+
+export const metadata: Metadata = {
+  title: 'Tarifs',
+  description:
+    'Tarifs Cache Cache Killer : 18\u20ac par personne (mercredi-dimanche), 12\u20ac en heures creuses (lundi-mardi). Privatisations d\u00e8s 250\u20ac.',
+  alternates: { canonical: 'https://cachecachekiller.fr/tarifs' },
+}
+
+/* ============================================
+   INLINE SVG ICONS
+   ============================================ */
+
+function CheckIcon() {
+  return (
+    <svg
+      className="mt-0.5 h-4 w-4 shrink-0 text-feedback-success-text"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+function InfoIcon() {
+  return (
+    <svg
+      className="mt-0.5 h-5 w-5 shrink-0 text-feedback-info-text"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+function QuestionIcon() {
+  return (
+    <svg
+      className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-gold-500)]"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5A.75.75 0 0110 5zm0 10a.75.75 0 01-.75-.75v-4.5a.75.75 0 011.5 0v4.5a.75.75 0 01-.75.75z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+/* ============================================
+   PRIVATISATION DATA
+   ============================================ */
+
+const PRIVATISATIONS = [
+  {
+    id: 'team-building',
+    title: 'Team Building',
+    capacity: '10\u201330 personnes',
+    duration: '2h',
+    price: '\u00c0 partir de 400\u20ac',
+    description: 'Renforcez la coh\u00e9sion de vos \u00e9quipes dans l\u2019ar\u00e8ne.',
+  },
+  {
+    id: 'anniversaire',
+    title: 'Anniversaire / EVG / EVJF',
+    capacity: '8\u201320 personnes',
+    duration: '1h30',
+    price: '\u00c0 partir de 250\u20ac',
+    description: 'Une f\u00eate dont ils se souviendront.',
+  },
+  {
+    id: 'sur-mesure',
+    title: 'Sur Mesure',
+    capacity: 'Variable',
+    duration: 'Variable',
+    price: 'Sur devis',
+    description: 'Votre \u00e9v\u00e9nement, nos r\u00e8gles. Contactez-nous.',
+  },
+] as const
+
+/* ============================================
+   FAQ DATA
+   ============================================ */
+
+const FAQ_ITEMS = [
+  {
+    question: 'Des frais cach\u00e9s ?',
+    answer: 'Non. Le prix affich\u00e9 est le prix final.',
+  },
+  {
+    question: 'On peut venir en groupe ?',
+    answer: 'Oui ! Un chef de groupe r\u00e9serve et partage le lien. Chaque joueur paye sa place.',
+  },
+  {
+    question: 'On choisit son camp quand ?',
+    answer: 'Le choix du camp (Survivant ou Tueur) se fait sur place, premier arriv\u00e9, premier servi.',
+  },
+] as const
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function TarifsPage() {
+  return (
+    <main className="flex flex-col">
+      {/* Hero */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center sm:py-20">
+        <h1 className="font-display text-4xl font-black uppercase tracking-wider text-text-primary sm:text-5xl md:text-6xl">
+          Tarifs
+        </h1>
+        <p className="max-w-xl font-serif text-lg italic text-text-secondary">
+          Simple, transparent, sans surprise.
+        </p>
+      </section>
+
+      {/* ============================================
+          MAIN PRICING
+          ============================================ */}
+      <AtmosphericSection subtitle="NOS FORMULES" separator stripes id="formules">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            {/* Session Standard */}
+            <Card variant="prestige" className="flex flex-col">
+              <CardHeader>
+                <span className="text-xs font-heading uppercase tracking-wider text-[var(--color-gold-500)]">
+                  Mercredi au dimanche
+                </span>
+                <CardTitle>Session Standard</CardTitle>
+              </CardHeader>
+              <CardContent className="mt-4 flex flex-1 flex-col gap-4">
+                {/* Price */}
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-5xl font-black text-[var(--color-gold-500)]">
+                    18&euro;
+                  </span>
+                  <span className="text-sm text-text-secondary">/ personne</span>
+                </div>
+
+                {/* Features — Rule 9: icon + text */}
+                <ul className="flex flex-col gap-2" role="list">
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    20 minutes de jeu intense
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    2 &agrave; 10 joueurs par session
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    Briefing + d&eacute;briefing inclus
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    &Eacute;quipement fourni
+                  </li>
+                </ul>
+
+                {/* CTA — Rule 3: 1 primary CTA */}
+                <div className="mt-auto pt-4">
+                  <Link href="/reserver" className="block">
+                    <Button variant="primary" size="lg" className="w-full">
+                      R&Eacute;SERVER
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Heures Creuses */}
+            <Card variant="default" className="flex flex-col">
+              <CardHeader>
+                <span className="text-xs font-heading uppercase tracking-wider text-text-secondary">
+                  Lundi et mardi (hors vacances scolaires)
+                </span>
+                <CardTitle>Heures Creuses</CardTitle>
+              </CardHeader>
+              <CardContent className="mt-4 flex flex-1 flex-col gap-4">
+                {/* Price */}
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-5xl font-black text-text-primary">
+                    12&euro;
+                  </span>
+                  <span className="text-sm text-text-secondary">/ personne</span>
+                </div>
+
+                {/* Features — Rule 9: icon + text */}
+                <ul className="flex flex-col gap-2" role="list">
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    M&ecirc;me exp&eacute;rience, prix r&eacute;duit
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    20 minutes de jeu intense
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    2 &agrave; 10 joueurs par session
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-text-primary">
+                    <CheckIcon />
+                    &Eacute;quipement fourni
+                  </li>
+                </ul>
+
+                {/* CTA — secondary (outlined) */}
+                <div className="mt-auto pt-4">
+                  <Link href="/reserver" className="block">
+                    <Button variant="secondary" size="lg" className="w-full">
+                      R&Eacute;SERVER
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Note */}
+          <div className="mt-8 flex items-start gap-3 rounded-lg border border-border-subtle bg-surface-raised p-4">
+            <InfoIcon />
+            <p className="text-sm text-text-primary">
+              <strong>Camp choisi sur place</strong> &mdash; premier arriv&eacute;, premier servi.
+              Aucune s&eacute;lection de camp lors de la r&eacute;servation.
+            </p>
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          PRIVATISATIONS
+          ============================================ */}
+      <AtmosphericSection
+        subtitle="&Eacute;V&Eacute;NEMENTS PRIV&Eacute;S"
+        separator
+        stripes
+        id="privatisations"
+        className="bg-[var(--color-surface-recessed)]"
+      >
+        <div className="mx-auto max-w-5xl">
+          <h2 className="mb-8 text-center font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            Privatisations
+          </h2>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {PRIVATISATIONS.map((item) => (
+              <Card key={item.id} variant="default" className="flex flex-col">
+                <CardHeader>
+                  <CardTitle>{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="mt-2 flex flex-1 flex-col gap-3">
+                  <dl className="flex flex-col gap-1 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-text-secondary">Capacit&eacute;</dt>
+                      <dd className="font-medium text-text-primary">{item.capacity}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-text-secondary">Dur&eacute;e</dt>
+                      <dd className="font-medium text-text-primary">{item.duration}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-text-secondary">Tarif</dt>
+                      <dd className="font-medium text-[var(--color-gold-500)]">{item.price}</dd>
+                    </div>
+                  </dl>
+                  <p className="text-sm text-text-secondary">{item.description}</p>
+                </CardContent>
+                <CardFooter className="mt-auto">
+                  <Link href="/contact" className="block w-full">
+                    <Button variant="secondary" size="lg" className="w-full">
+                      NOUS CONTACTER
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          FAQ
+          ============================================ */}
+      <AtmosphericSection subtitle="QUESTIONS FR&Eacute;QUENTES" separator id="faq">
+        <div className="mx-auto max-w-2xl space-y-6">
+          {FAQ_ITEMS.map((item) => (
+            <div
+              key={item.question}
+              className="flex items-start gap-3 rounded-lg border border-border-subtle bg-surface-raised p-4"
+            >
+              <QuestionIcon />
+              <div>
+                <p className="font-heading font-medium text-text-primary">
+                  {item.question}
+                </p>
+                <p className="mt-1 text-sm text-text-secondary">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          CTA — Rule 3: 1 seul CTA primaire visible
+          ============================================ */}
+      <AtmosphericSection separator className="bg-[var(--color-surface-recessed)]">
+        <div className="flex flex-col items-center gap-6 text-center">
+          <h2 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
+            L&apos;ar&egrave;ne vous attend
+          </h2>
+          <Link href="/reserver">
+            <Button variant="primary" size="lg">
+              R&Eacute;SERVER UNE SESSION
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/faq/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { AtmosphericSection, SmokeBackground, Button } from '@cck/ui'
+
+/** ISR: revalidate every 24 hours (FAQ content rarely changes) */
+export const revalidate = 86400
+
+export const metadata: Metadata = {
+  title: 'FAQ',
+  description:
+    'Questions fr\u00e9quentes sur Cache Cache Killer : r\u00e8gles du jeu, \u00e2ge minimum, dur\u00e9e, fonctionnement des parties.',
+  alternates: { canonical: 'https://cachecachekiller.fr/faq' },
+}
+
+/* ============================================
+   FAQ DATA
+   CCK = Survival grandeur nature
+   NOT escape game, NOT laser game
+   ============================================ */
+
+interface FaqItem {
+  question: string
+  answer: string
+}
+
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    question: 'C\u2019est quoi Cache Cache Killer ?',
+    answer:
+      'Cache Cache Killer est un jeu de survie grandeur nature. Pas un escape game, pas un laser game. Deux camps s\u2019affrontent dans une ar\u00e8ne de 500m\u00b2 : les Survivants doivent activer des g\u00e9n\u00e9rateurs et s\u2019extraire, tandis que le Tueur les traque avec une lampe infrarouge.',
+  },
+  {
+    question: '\u00c0 partir de quel \u00e2ge ?',
+    answer:
+      'D\u00e8s 12 ans. Les mineurs doivent \u00eatre accompagn\u00e9s d\u2019un adulte responsable.',
+  },
+  {
+    question: 'Combien de joueurs ?',
+    answer:
+      'De 2 \u00e0 10 joueurs par session. Id\u00e9al entre amis, en famille ou entre coll\u00e8gues.',
+  },
+  {
+    question: 'Combien de temps dure une partie ?',
+    answer:
+      '20 minutes par session. Pr\u00e9voyez d\u2019arriver 10 minutes avant pour le briefing.',
+  },
+  {
+    question: 'On court pendant la partie ?',
+    answer:
+      'Non. La course est interdite pour des raisons de s\u00e9curit\u00e9. Le jeu repose sur la strat\u00e9gie, la discr\u00e9tion et la coordination.',
+  },
+  {
+    question: 'On choisit son camp \u00e0 l\u2019avance ?',
+    answer:
+      'Non. Le choix du camp (Survivant ou Tueur) se fait sur place, 10 minutes avant la session. Premier arriv\u00e9, premier servi.',
+  },
+  {
+    question: 'Comment se d\u00e9roule une partie ?',
+    answer:
+      'Phase 1 \u2014 Pr\u00e9paration (15 min) : les Survivants activent les g\u00e9n\u00e9rateurs, le Tueur les traque. Phase 2 \u2014 Extraction (temps restant) : les Survivants maintiennent les boutons d\u2019extraction dans le bon ordre. Le Tueur devient mortel.',
+  },
+  {
+    question: 'C\u2019est quoi les g\u00e9n\u00e9rateurs ?',
+    answer:
+      'Ce sont des dispositifs physiques r\u00e9partis dans l\u2019ar\u00e8ne. Les Survivants doivent les activer pour progresser. Le Tueur peut les faire disjoncter en blessant un Survivant \u00e0 proximit\u00e9.',
+  },
+  {
+    question: 'Il y a des \u00e9crans pendant le jeu ?',
+    answer:
+      'Aucun. Tout est physique et tangible. L\u2019immersion est totale.',
+  },
+  {
+    question: 'O\u00f9 \u00eates-vous situ\u00e9s ?',
+    answer:
+      'En Essonne (\u00cele-de-France). L\u2019adresse exacte sera communiqu\u00e9e \u00e0 l\u2019ouverture, pr\u00e9vue en octobre 2026.',
+  },
+]
+
+/* ============================================
+   ACCORDION ITEM COMPONENT
+   Semantic HTML details/summary — no JS needed.
+   Accessible: native aria-expanded via browser.
+   Touch target: min-h-[48px] — Rule 1.
+   ============================================ */
+
+function FaqAccordionItem({ question, answer }: FaqItem) {
+  return (
+    <details className="group border-b border-border-subtle">
+      <summary className="flex min-h-[48px] cursor-pointer items-center justify-between py-4 font-heading text-base font-medium text-text-primary list-none [&::-webkit-details-marker]:hidden hover:bg-surface-raised-hover transition-colors duration-150 rounded-md px-4 focus-visible:focus-ring">
+        <span>{question}</span>
+        {/* Chevron — rotates when open — Rule 5: reduced-motion */}
+        <svg
+          className="h-5 w-5 shrink-0 text-text-secondary transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </summary>
+      <div className="pb-4 px-4 text-sm text-text-secondary leading-relaxed">
+        {answer}
+      </div>
+    </details>
+  )
+}
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function FaqPage() {
+  return (
+    <>
+      {/* ============================================
+          HERO
+          ============================================ */}
+      <section className="relative flex flex-col items-center gap-4 overflow-hidden px-4 py-16 text-center sm:py-20">
+        <SmokeBackground variant="accueil" />
+        <p className="font-heading text-sm uppercase tracking-widest text-text-accent">
+          Vos questions, nos r&eacute;ponses
+        </p>
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl md:text-6xl">
+          FAQ
+        </h1>
+      </section>
+
+      {/* ============================================
+          FAQ ACCORDION
+          ============================================ */}
+      <AtmosphericSection separator stripes>
+        <div className="mx-auto max-w-3xl">
+          <div className="overflow-hidden rounded-lg border border-border-subtle">
+            {FAQ_ITEMS.map((item) => (
+              <FaqAccordionItem
+                key={item.question}
+                question={item.question}
+                answer={item.answer}
+              />
+            ))}
+          </div>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          CONTACT CTA — Rule 3: 1 single primary CTA
+          ============================================ */}
+      <AtmosphericSection separator className="text-center">
+        <div className="mx-auto flex max-w-lg flex-col items-center gap-6">
+          <h2 className="font-heading text-xl font-bold text-text-primary sm:text-2xl">
+            Vous avez une autre question ?
+          </h2>
+          <p className="text-text-secondary">
+            Notre &eacute;quipe est disponible pour r&eacute;pondre &agrave;
+            toutes vos interrogations.
+          </p>
+          <Link href="/contact">
+            <Button variant="primary" size="lg">
+              Nous contacter
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/reserver/layout.tsx
+=====================================
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Reserver',
+  description:
+    'Reservez votre session Cache Cache Killer — survival grandeur nature. Creneaux de 20 minutes, 2 a 10 joueurs, a partir de 12\u20ac.',
+  alternates: { canonical: 'https://cachecachekiller.fr/reserver' },
+}
+
+export default function ReserverLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return children
+}
+
+
+=====================================
+FILE: apps/site/src/app/reserver/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import { AtmosphericSection, Card, CardContent } from '@cck/ui'
+import { EmailSignupForm } from './EmailSignupForm'
+
+export const metadata: Metadata = {
+  title: 'R\u00e9server',
+  description:
+    'R\u00e9servez votre session Cache Cache Killer. Cr\u00e9neaux de 20 minutes, 2 \u00e0 10 joueurs, \u00e0 partir de 12\u20ac.',
+  alternates: { canonical: 'https://cachecachekiller.fr/reserver' },
+}
+
+/* ============================================
+   INLINE SVG ICONS
+   ============================================ */
+
+function CalendarIcon() {
+  return (
+    <svg className="h-8 w-8 text-[var(--color-gold-500)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M8 2v4M16 2v4" />
+      <rect x="7" y="14" width="3" height="3" rx="0.5" className="fill-[var(--color-gold-500)]/20" />
+    </svg>
+  )
+}
+
+function UsersIcon() {
+  return (
+    <svg className="h-8 w-8 text-[var(--color-gold-500)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+      <circle cx="9" cy="7" r="4" />
+      <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
+      <circle cx="17" cy="7" r="3" className="stroke-[var(--color-gold-500)]/60" />
+      <path d="M21 21v-2a3 3 0 00-3-3h-1" className="stroke-[var(--color-gold-500)]/60" />
+    </svg>
+  )
+}
+
+function CreditCardIcon() {
+  return (
+    <svg className="h-8 w-8 text-[var(--color-gold-500)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+      <path d="M6 15h4" className="stroke-[var(--color-gold-500)]/60" />
+    </svg>
+  )
+}
+
+function QrCodeIcon() {
+  return (
+    <svg className="h-8 w-8 text-[var(--color-gold-500)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="3" height="3" rx="0.5" className="fill-[var(--color-gold-500)]/20" />
+      <path d="M21 14h-3v3h3M18 21h3v-3" className="stroke-[var(--color-gold-500)]/60" />
+    </svg>
+  )
+}
+
+function InfoIcon() {
+  return (
+    <svg className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-blue-500)]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+/* ============================================
+   BOOKING STEPS DATA
+   ============================================ */
+
+const BOOKING_STEPS = [
+  {
+    number: 1,
+    label: 'Choisir un cr\u00e9neau',
+    description: 'S\u00e9lectionnez un cr\u00e9neau de 20 minutes parmi les disponibilit\u00e9s.',
+    icon: <CalendarIcon />,
+  },
+  {
+    number: 2,
+    label: 'Nombre de joueurs',
+    description: 'De 2 \u00e0 10 joueurs par session. Un chef de groupe r\u00e9serve pour tous.',
+    icon: <UsersIcon />,
+  },
+  {
+    number: 3,
+    label: 'Paiement s\u00e9curis\u00e9',
+    description: 'Paiement par carte via Stripe. Transaction 100% s\u00e9curis\u00e9e.',
+    icon: <CreditCardIcon />,
+  },
+  {
+    number: 4,
+    label: 'Confirmation',
+    description: 'Recevez votre QR code de confirmation par email.',
+    icon: <QrCodeIcon />,
+  },
+] as const
+
+/* ============================================
+   INFO ITEMS
+   ============================================ */
+
+const INFO_ITEMS = [
+  'Arrivez 10 minutes avant votre session',
+  'Portez des v\u00eatements confortables et des chaussures ferm\u00e9es',
+  'Le choix du camp se fait sur place \u2014 premier arriv\u00e9, premier servi',
+  'Walk-ins accept\u00e9s s\u2019il reste des places',
+] as const
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function ReserverPage() {
+  return (
+    <main className="flex flex-col">
+      {/* Hero */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center sm:py-20">
+        <h1 className="font-display text-4xl font-black uppercase tracking-wider text-text-primary sm:text-5xl md:text-6xl">
+          R&eacute;server
+        </h1>
+        <p className="max-w-xl font-serif text-lg italic text-text-secondary">
+          Choisissez votre cr&eacute;neau et entrez dans l&apos;ar&egrave;ne.
+        </p>
+      </section>
+
+      {/* ============================================
+          BOOKING STEPS VISUAL STEPPER
+          ============================================ */}
+      <AtmosphericSection subtitle="R&Eacute;SERVATION" separator stripes id="reservation">
+        <div className="mx-auto max-w-4xl">
+          {/* Visual stepper: 4 steps */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {BOOKING_STEPS.map((step) => (
+              <div
+                key={step.number}
+                className="flex flex-col items-center gap-3 rounded-lg border border-border-subtle bg-surface-raised p-6 text-center"
+              >
+                {/* Step number badge — Rule 9: number + icon, never color alone */}
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-gold-500)]/10 font-heading text-sm font-bold text-[var(--color-gold-500)]">
+                  {step.number}
+                </div>
+                {step.icon}
+                <h3 className="font-heading text-sm font-bold text-text-primary">
+                  {step.label}
+                </h3>
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Coming soon state */}
+          <Card variant="prestige" className="mt-10">
+            <CardContent className="flex flex-col items-center gap-6 p-8 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[var(--color-gold-500)] bg-[var(--color-gold-500)]/10">
+                <CalendarIcon />
+              </div>
+              <div className="space-y-2">
+                <h2 className="font-heading text-xl font-bold text-text-primary sm:text-2xl">
+                  Les r&eacute;servations ouvriront prochainement
+                </h2>
+                <p className="text-text-secondary">
+                  Ouverture pr&eacute;vue : <strong className="text-[var(--color-gold-500)]">octobre 2026</strong>
+                </p>
+              </div>
+
+              {/* Email signup */}
+              <div className="w-full space-y-3">
+                <p className="font-heading text-sm font-medium text-text-primary">
+                  Soyez les premiers inform&eacute;s
+                </p>
+                <EmailSignupForm />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          INFO BOXES
+          ============================================ */}
+      <AtmosphericSection subtitle="INFORMATIONS PRATIQUES" separator id="infos" className="bg-[var(--color-surface-recessed)]">
+        <div className="mx-auto max-w-2xl space-y-4">
+          {INFO_ITEMS.map((item) => (
+            <div
+              key={item}
+              className="flex items-start gap-3 rounded-lg border border-border-subtle bg-surface-raised p-4"
+            >
+              <InfoIcon />
+              <p className="text-sm text-text-primary">{item}</p>
+            </div>
+          ))}
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          PRICING REMINDER
+          ============================================ */}
+      <AtmosphericSection separator>
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="font-heading text-lg font-medium text-text-primary">
+            <span className="text-[var(--color-gold-500)]">18&euro;</span> / personne (mer-dim)
+            {' '}&middot;{' '}
+            <span className="text-text-primary">12&euro;</span> en heures creuses (lun-mar)
+          </p>
+          <p className="mt-2 text-sm text-text-secondary">
+            Pas de frais cach&eacute;s. Le camp se choisit sur place.
+          </p>
+        </div>
+      </AtmosphericSection>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/reserver/confirmation/page.tsx
+=====================================
+import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Reservation confirmee | Cache Cache Killer',
+  description: 'Votre reservation a ete confirmee avec succes.',
+}
+
+/**
+ * Confirmation page — shown after successful Stripe Checkout.
+ *
+ * Stripe redirects here with the booking_id (transaction ID) as a search param.
+ * The actual booking confirmation is handled by the Stripe webhook
+ * (checkout.session.completed) which updates the stripe_transaction status.
+ *
+ * Rule 1: Touch targets 48px minimum.
+ * Rule 9: Color never sole indicator — checkmark icon + text.
+ */
+export default async function ConfirmationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ booking_id?: string }>
+}) {
+  const { booking_id } = await searchParams
+
+  return (
+    <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+      <div className="mx-auto max-w-md">
+        {/* Success icon — Rule 9: icon + color + text combined */}
+        <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-feedback-success-bg border border-feedback-success-border mx-auto">
+          <svg
+            className="h-8 w-8 text-feedback-success-text"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+
+        <h1 className="font-display text-2xl font-bold text-text-primary mb-4">
+          Reservation confirmee !
+        </h1>
+
+        <p className="text-text-secondary mb-2">
+          Votre paiement a ete accepte et votre reservation est confirmee.
+        </p>
+
+        {booking_id && (
+          <p className="text-text-muted text-sm mb-6">
+            Reference : <code className="text-text-accent font-mono">{booking_id}</code>
+          </p>
+        )}
+
+        <p className="text-text-secondary mb-8">
+          Un email de confirmation a ete envoye a l&apos;adresse indiquee.
+          Pensez a arriver 15 minutes avant votre session.
+        </p>
+
+        {/* Rule 1: 48px touch target */}
+        <Link
+          href="/"
+          prefetch={true}
+          className="inline-flex min-h-[48px] items-center rounded-md bg-interactive-primary px-6 py-3 font-heading font-medium text-interactive-primary-fg transition-colors duration-150 hover:bg-interactive-primary-hover focus-visible:focus-ring"
+        >
+          Retour a l&apos;accueil
+        </Link>
+      </div>
+    </main>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/reserver/EmailSignupForm.tsx
+=====================================
+'use client'
+
+import { useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
+import { joinWaitlist, type WaitlistState } from '@/lib/actions/waitlist-actions'
+import { Button } from '@cck/ui'
+
+/* ============================================
+   INLINE SVG ICONS
+   ============================================ */
+
+function MailIcon() {
+  return (
+    <svg className="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      className="h-5 w-5 shrink-0"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M16.704 5.296a1 1 0 010 1.414l-7.5 7.5a1 1 0 01-1.414 0l-3.5-3.5a1 1 0 111.414-1.414L8.5 12.086l6.79-6.79a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+function AlertIcon() {
+  return (
+    <svg
+      className="h-5 w-5 shrink-0"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}
+
+/* ============================================
+   SUBMIT BUTTON — reads pending state from useFormStatus
+   ============================================ */
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <div className="flex items-end">
+      <Button variant="primary" size="lg" type="submit" disabled={pending} aria-disabled={pending}>
+        <MailIcon />
+        {pending ? 'Envoi...' : 'ME PR\u00c9VENIR'}
+      </Button>
+    </div>
+  )
+}
+
+/* ============================================
+   EMAIL SIGNUP FORM
+   ============================================ */
+
+export function EmailSignupForm() {
+  const [state, formAction] = useActionState<WaitlistState, FormData>(joinWaitlist, null)
+
+  // Once successfully subscribed, show a confirmation message instead of the form
+  if (state?.success === true) {
+    return (
+      <div
+        className="mx-auto flex w-full max-w-md items-start gap-3 rounded-md border border-[var(--color-feedback-success-border,theme(colors.green.700))] bg-[var(--color-feedback-success-bg,theme(colors.green.950))] px-4 py-3"
+        role="status"
+        aria-live="polite"
+      >
+        <CheckIcon />
+        <p className="text-sm font-medium text-[var(--color-feedback-success-fg,theme(colors.green.300))]">
+          Inscription confirm&eacute;e ! Nous vous pr&eacute;viendrons d&egrave;s l&apos;ouverture.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex w-full flex-col gap-3">
+      <form
+        className="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
+        action={formAction}
+      >
+        {/* Rule 8: Visible label above input */}
+        <div className="flex flex-1 flex-col gap-1">
+          <label
+            htmlFor="notify-email"
+            className="text-xs font-heading font-medium text-text-secondary"
+          >
+            Adresse email
+          </label>
+          <input
+            id="notify-email"
+            name="notify-email"
+            type="email"
+            placeholder="votre@email.fr"
+            autoComplete="email"
+            required
+            aria-describedby={state?.success === false ? 'waitlist-error' : undefined}
+            aria-invalid={state?.success === false ? true : undefined}
+            className="h-12 w-full rounded-md border border-border-subtle bg-surface-raised px-4 text-sm text-text-primary placeholder:text-text-muted focus:border-[var(--color-gold-500)] focus:outline-none focus:ring-2 focus:ring-[var(--color-gold-500)]/40"
+          />
+        </div>
+        <SubmitButton />
+      </form>
+
+      {/* Rule 7: Inline validation — error state */}
+      {/* Rule 9: Icon + text, never color alone */}
+      {state?.success === false && (
+        <div
+          id="waitlist-error"
+          className="mx-auto flex w-full max-w-md items-start gap-2"
+          role="alert"
+          aria-live="assertive"
+        >
+          <AlertIcon />
+          <p className="text-sm text-[var(--color-feedback-danger-fg,theme(colors.red.400))]">
+            {state.error}
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/privatisation/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import {
+  AtmosphericSection,
+  SmokeBackground,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  Badge,
+  Button,
+} from '@cck/ui'
+
+export const metadata: Metadata = {
+  title: 'Privatisations',
+  description:
+    '\u00c9v\u00e9nements priv\u00e9s Cache Cache Killer : team building, anniversaires, EVG/EVJF, sur mesure. R\u00e9servez l\u2019ar\u00e8ne pour votre groupe.',
+  alternates: { canonical: 'https://cachecachekiller.fr/privatisation' },
+}
+
+/* ============================================
+   PRIVATISATION FORMATS DATA
+   ============================================ */
+
+interface PrivatisationFormat {
+  id: string
+  title: string
+  badge: string
+  participants: string
+  duration: string
+  price: string
+  description: string
+  idealFor: string[]
+  icon: React.ReactNode
+}
+
+const FORMATS: PrivatisationFormat[] = [
+  {
+    id: 'team-building',
+    title: 'Team Building',
+    badge: 'Entreprises',
+    participants: '10-30 personnes',
+    duration: '2h',
+    price: '\u00c0 partir de 400\u20ac',
+    description:
+      'Renforcez l\u2019esprit d\u2019\u00e9quipe avec une exp\u00e9rience immersive. Vos collaborateurs devront coop\u00e9rer, communiquer et strat\u00e9giser pour survivre \u00e0 l\u2019ar\u00e8ne.',
+    idealFor: ['Entreprises', 'Associations', 'Clubs sportifs'],
+    icon: (
+      <svg
+        className="h-8 w-8"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+        />
+      </svg>
+    ),
+  },
+  {
+    id: 'anniversaire',
+    title: 'Anniversaire / EVG / EVJF',
+    badge: 'F\u00eates',
+    participants: '8-20 personnes',
+    duration: '1h30',
+    price: '\u00c0 partir de 250\u20ac',
+    description:
+      'Une f\u00eate inoubliable dans l\u2019ar\u00e8ne. C\u00e9l\u00e9brez un moment sp\u00e9cial avec une exp\u00e9rience que personne n\u2019oubliera.',
+    idealFor: [
+      'Anniversaires (12+)',
+      'Enterrements de vie de gar\u00e7on',
+      'Enterrements de vie de jeune fille',
+    ],
+    icon: (
+      <svg
+        className="h-8 w-8"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.126-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12 8.25a2.25 2.25 0 01-2.248-2.148A23.61 23.61 0 0112 6c.77 0 1.53.024 2.248.072A2.25 2.25 0 0112 8.25z"
+        />
+      </svg>
+    ),
+  },
+  {
+    id: 'sur-mesure',
+    title: 'Sur Mesure',
+    badge: 'Premium',
+    participants: 'Sur devis',
+    duration: 'Sur devis',
+    price: 'Sur devis',
+    description:
+      'Votre \u00e9v\u00e9nement, nos r\u00e8gles. Nous concevons une exp\u00e9rience enti\u00e8rement personnalis\u00e9e selon vos besoins sp\u00e9cifiques.',
+    idealFor: [
+      '\u00c9v\u00e9nements corporate',
+      'Lancements de produit',
+      'Tournages / Presse',
+    ],
+    icon: (
+      <svg
+        className="h-8 w-8"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"
+        />
+      </svg>
+    ),
+  },
+]
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function PrivatisationPage() {
+  return (
+    <>
+      {/* ============================================
+          HERO
+          ============================================ */}
+      <section className="relative flex flex-col items-center gap-4 overflow-hidden px-4 py-16 text-center sm:py-20">
+        <SmokeBackground variant="accueil" />
+        <p className="font-heading text-sm uppercase tracking-widest text-text-accent">
+          &Eacute;v&eacute;nement priv&eacute;
+        </p>
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl md:text-6xl">
+          PRIVATISATION
+        </h1>
+        <p className="max-w-xl text-lg text-text-secondary">
+          R&eacute;servez l&apos;ar&egrave;ne pour votre groupe. Team building,
+          anniversaire, EVG/EVJF ou &eacute;v&eacute;nement sur mesure.
+        </p>
+      </section>
+
+      {/* ============================================
+          FORMATS
+          ============================================ */}
+      <AtmosphericSection subtitle="NOS FORMULES" separator stripes>
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-3">
+          {FORMATS.map((format) => (
+            <Card key={format.id} className="flex flex-col">
+              <CardHeader>
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-surface-recessed text-text-accent">
+                    {format.icon}
+                  </div>
+                  <Badge variant="prestige" size="sm">
+                    {format.badge}
+                  </Badge>
+                </div>
+                <CardTitle>{format.title}</CardTitle>
+              </CardHeader>
+
+              <CardContent className="mt-3 flex flex-1 flex-col gap-4">
+                <p className="text-sm leading-relaxed text-text-secondary">
+                  {format.description}
+                </p>
+
+                {/* Details */}
+                <dl className="flex flex-col gap-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <dt className="text-text-secondary">Participants</dt>
+                    <dd className="font-heading font-medium text-text-primary">
+                      {format.participants}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-text-secondary">Dur&eacute;e</dt>
+                    <dd className="font-heading font-medium text-text-primary">
+                      {format.duration}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-text-secondary">Tarif</dt>
+                    <dd className="font-heading font-bold text-text-accent">
+                      {format.price}
+                    </dd>
+                  </div>
+                </dl>
+
+                {/* Ideal for — Rule 9: icon + text */}
+                <div>
+                  <p className="mb-2 text-xs font-heading uppercase tracking-wider text-text-secondary">
+                    Id&eacute;al pour
+                  </p>
+                  <ul className="flex flex-col gap-1.5">
+                    {format.idealFor.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center gap-2 text-sm text-text-primary"
+                      >
+                        <svg
+                          className="h-3.5 w-3.5 shrink-0 text-text-accent"
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.22 5.97l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+
+              <CardFooter className="mt-4">
+                <Link href="/contact" className="w-full">
+                  <Button variant="primary" size="lg" className="w-full">
+                    DEMANDER UN DEVIS
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          HOW IT WORKS
+          ============================================ */}
+      <AtmosphericSection subtitle="COMMENT CA MARCHE" separator>
+        <div className="mx-auto max-w-3xl">
+          <ol className="flex flex-col gap-6">
+            {[
+              {
+                step: '1',
+                title: 'Contactez-nous',
+                desc: 'D\u00e9crivez votre \u00e9v\u00e9nement, le nombre de participants et la date souhait\u00e9e.',
+              },
+              {
+                step: '2',
+                title: 'Devis personnalis\u00e9',
+                desc: 'Nous vous envoyons une proposition adapt\u00e9e \u00e0 vos besoins sous 48 heures.',
+              },
+              {
+                step: '3',
+                title: 'Confirmation',
+                desc: 'Validez le devis et r\u00e9servez votre cr\u00e9neau. L\u2019ar\u00e8ne est \u00e0 vous.',
+              },
+            ].map((item) => (
+              <li
+                key={item.step}
+                className="flex items-start gap-4"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-accent bg-surface-raised font-display text-lg font-bold text-text-accent">
+                  {item.step}
+                </div>
+                <div>
+                  <h3 className="font-heading text-base font-bold text-text-primary">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-text-secondary">
+                    {item.desc}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          CTA — Rule 3: 1 single primary CTA
+          ============================================ */}
+      <AtmosphericSection separator className="text-center">
+        <div className="mx-auto flex max-w-xl flex-col items-center gap-6">
+          <h2 className="font-display text-2xl font-bold italic text-text-primary sm:text-3xl">
+            Votre &eacute;v&eacute;nement dans l&apos;ar&egrave;ne
+          </h2>
+          <p className="text-text-secondary">
+            Contactez-nous pour organiser une exp&eacute;rience unique et
+            m&eacute;morable pour votre groupe.
+          </p>
+          <Link href="/contact">
+            <Button variant="danger" size="lg">
+              NOUS CONTACTER
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/classement/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import {
+  AtmosphericSection,
+  SmokeBackground,
+  Badge,
+  Button,
+} from '@cck/ui'
+import { getTopPlayers } from '@/lib/dal/leaderboard'
+
+/** ISR: revalidate every 5 minutes (leaderboard changes frequently during sessions) */
+export const revalidate = 300
+
+export const metadata: Metadata = {
+  title: 'Classement',
+  description:
+    'Classement mensuel des joueurs Cache Cache Killer. D\u00e9couvrez les champions de l\u2019ar\u00e8ne.',
+  alternates: { canonical: 'https://cachecachekiller.fr/classement' },
+}
+
+/* ============================================
+   TYPES — Structured for future real data
+   ============================================ */
+
+interface LeaderboardPlayer {
+  rank: number
+  pseudo: string
+  level: number
+  camp: 'survivor' | 'killer' | null
+  totalXp: number
+}
+
+/* ============================================
+   PODIUM COMPONENT
+   Semantic tokens: --color-rank-1, --color-rank-2, --color-rank-3
+   ============================================ */
+
+function Podium({ players }: { players: LeaderboardPlayer[] }) {
+  if (players.length === 0) {
+    return (
+      <div className="mx-auto max-w-md py-12 text-center">
+        {/* Empty state icon — Rule 9: icon + text */}
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-border-subtle bg-surface-raised">
+          <svg
+            className="h-10 w-10 text-text-muted"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 01-2.77.672c-.992 0-1.929-.24-2.77-.672"
+            />
+          </svg>
+        </div>
+        <p className="font-serif text-lg italic text-text-primary">
+          L&apos;ar&egrave;ne est silencieuse... pour l&apos;instant.
+        </p>
+        <p className="mt-3 text-sm text-text-secondary">
+          Le classement s&apos;activera &agrave; l&apos;ouverture en octobre
+          2026.
+        </p>
+      </div>
+    )
+  }
+
+  const top3 = players.slice(0, 3)
+  // Display order: 2nd, 1st, 3rd for podium visual
+  const podiumOrder = [top3[1], top3[0], top3[2]].filter((p): p is LeaderboardPlayer => p !== undefined)
+
+  return (
+    <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:items-end sm:gap-8">
+      {podiumOrder.map((player) => {
+        const isFirst = player.rank === 1
+        const isSecond = player.rank === 2
+        const circleSize = isFirst ? 'h-20 w-20' : 'h-16 w-16'
+        const barHeight = isFirst
+          ? 'h-28 sm:h-32'
+          : isSecond
+            ? 'h-20 sm:h-24'
+            : 'h-16 sm:h-20'
+        const borderColor = isFirst
+          ? 'border-[var(--color-rank-1,#b89040)]'
+          : isSecond
+            ? 'border-[var(--color-rank-2,#a0a0a0)]'
+            : 'border-[var(--color-rank-3,#cd7f32)]'
+        const textColor = isFirst
+          ? 'text-[var(--color-rank-1,#b89040)]'
+          : isSecond
+            ? 'text-[var(--color-rank-2,#a0a0a0)]'
+            : 'text-[var(--color-rank-3,#cd7f32)]'
+        const barBg = isFirst
+          ? 'from-[var(--color-rank-1,#b89040)]/20 to-[var(--color-rank-1,#b89040)]/5'
+          : isSecond
+            ? 'from-[var(--color-rank-2,#a0a0a0)]/20 to-[var(--color-rank-2,#a0a0a0)]/5'
+            : 'from-[var(--color-rank-3,#cd7f32)]/20 to-[var(--color-rank-3,#cd7f32)]/5'
+        const orderClass =
+          player.rank === 1
+            ? 'order-1 sm:order-2'
+            : player.rank === 2
+              ? 'order-2 sm:order-1'
+              : 'order-3'
+
+        return (
+          <div
+            key={player.rank}
+            className={`flex flex-col items-center gap-3 ${orderClass}`}
+          >
+            {/* Crown for 1st */}
+            {isFirst && (
+              <svg
+                className="h-6 w-6 text-[var(--color-rank-1,#b89040)]"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                aria-label="Couronne du premier"
+              >
+                <path d="M2 12l2-7 4 4 4-4 2 7H2zM4 13h8v1H4v-1z" />
+              </svg>
+            )}
+            <div
+              className={`flex ${circleSize} items-center justify-center rounded-full border-2 ${borderColor} bg-surface-raised font-display font-bold ${textColor} ${isFirst ? 'text-2xl' : 'text-xl'}`}
+              style={
+                isFirst
+                  ? { boxShadow: '0 0 20px rgba(184, 144, 64, 0.3)' }
+                  : undefined
+              }
+              aria-label={`${player.rank === 1 ? 'Premi\u00e8re' : player.rank === 2 ? 'Deuxi\u00e8me' : 'Troisi\u00e8me'} place`}
+            >
+              {player.rank}
+            </div>
+            <div
+              className={`w-24 ${isFirst ? 'w-28' : ''} rounded-t-lg bg-gradient-to-t ${barBg} ${barHeight}`}
+            />
+            <span className="font-heading text-sm font-medium text-text-primary">
+              {player.pseudo}
+            </span>
+            {player.camp !== null && (
+              <Badge
+                variant={player.camp === 'survivor' ? 'survivor' : 'killer'}
+                size="sm"
+              >
+                {player.camp === 'survivor' ? 'Survivant' : 'Tueur'}
+              </Badge>
+            )}
+            <span className="font-mono text-xs text-text-secondary">
+              {player.totalXp.toLocaleString('fr-FR')} XP
+            </span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ============================================
+   PLAYER TABLE COMPONENT
+   ============================================ */
+
+function PlayerTable({ players }: { players: LeaderboardPlayer[] }) {
+  if (players.length === 0) return null
+
+  return (
+    <div className="mt-10 overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-border-subtle text-left">
+            <th className="px-3 py-3 font-heading font-medium text-text-secondary">
+              #
+            </th>
+            <th className="px-3 py-3 font-heading font-medium text-text-secondary">
+              Pseudo
+            </th>
+            <th className="px-3 py-3 font-heading font-medium text-text-secondary">
+              Niveau
+            </th>
+            <th className="px-3 py-3 font-heading font-medium text-text-secondary">
+              Camp
+            </th>
+            <th className="px-3 py-3 text-right font-heading font-medium text-text-secondary">
+              XP Total
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((player) => (
+            <tr
+              key={player.rank}
+              className="border-b border-border-subtle transition-colors duration-150 hover:bg-surface-raised-hover"
+            >
+              <td className="px-3 py-3 font-heading font-bold text-text-accent">
+                {player.rank}
+              </td>
+              <td className="px-3 py-3 font-heading font-medium text-text-primary">
+                {player.pseudo}
+              </td>
+              <td className="px-3 py-3 text-text-primary">
+                Nv. {player.level}
+              </td>
+              <td className="px-3 py-3">
+                {player.camp !== null ? (
+                  <Badge
+                    variant={player.camp === 'survivor' ? 'survivor' : 'killer'}
+                    size="sm"
+                  >
+                    {player.camp === 'survivor' ? 'Survivant' : 'Tueur'}
+                  </Badge>
+                ) : (
+                  <span className="text-xs text-text-muted">—</span>
+                )}
+              </td>
+              <td className="px-3 py-3 text-right font-mono text-text-primary">
+                {player.totalXp.toLocaleString('fr-FR')}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/* ============================================
+   HOW IT WORKS DATA
+   ============================================ */
+
+const HOW_IT_WORKS = [
+  {
+    icon: (
+      <svg
+        className="h-6 w-6"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.25 3a.75.75 0 011.5 0v4.25l2.5 1.5a.75.75 0 01-.75 1.3L8.25 9.2V4z" />
+      </svg>
+    ),
+    text: 'Gagnez de l\u2019XP \u00e0 chaque partie',
+  },
+  {
+    icon: (
+      <svg
+        className="h-6 w-6"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v1H2V3zm0 2h12v7a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm5 2a.75.75 0 000 1.5h2a.75.75 0 000-1.5H7z" />
+      </svg>
+    ),
+    text: 'Le classement se r\u00e9initialise chaque mois',
+  },
+  {
+    icon: (
+      <svg
+        className="h-6 w-6"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M8 1l2 4 4.5.65-3.25 3.17.77 4.48L8 11.27 3.98 13.3l.77-4.48L1.5 5.65 6 5z" />
+      </svg>
+    ),
+    text: 'Les meilleurs joueurs sont mis en avant ici',
+  },
+]
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default async function ClassementPage() {
+  const currentMonth = new Date().toLocaleDateString('fr-FR', {
+    month: 'long',
+    year: 'numeric',
+  })
+
+  // Fetch top 20 players — returns [] on error (pre-launch, missing env, DB down)
+  const rawPlayers = await getTopPlayers(20)
+
+  // Map SiteLeaderboardPlayer to the local LeaderboardPlayer type used by Podium/PlayerTable
+  const monthlyPlayers: LeaderboardPlayer[] = rawPlayers.map((p) => ({
+    rank: p.rank,
+    pseudo: p.pseudo,
+    level: p.level,
+    camp: p.camp,
+    totalXp: p.totalXp,
+  }))
+
+  return (
+    <>
+      {/* ============================================
+          HERO
+          ============================================ */}
+      <section className="relative flex flex-col items-center gap-4 overflow-hidden px-4 py-16 text-center sm:py-20">
+        <SmokeBackground variant="arene" />
+        <p className="font-heading text-sm uppercase tracking-widest text-text-accent">
+          Les champions de l&apos;ar&egrave;ne
+        </p>
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl md:text-6xl">
+          CLASSEMENT
+        </h1>
+      </section>
+
+      {/* ============================================
+          MONTHLY LEADERBOARD
+          ============================================ */}
+      <AtmosphericSection
+        subtitle="CLASSEMENT DU MOIS"
+        separator
+        stripes
+        id="classement-mensuel"
+      >
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-8 text-center font-display text-2xl font-bold text-text-primary sm:text-3xl">
+            Classement de{' '}
+            <span className="capitalize text-text-accent">{currentMonth}</span>
+          </h2>
+
+          <Podium players={monthlyPlayers} />
+          <PlayerTable players={monthlyPlayers} />
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          HOW IT WORKS
+          ============================================ */}
+      <AtmosphericSection subtitle="COMMENT CA MARCHE" separator>
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-3">
+          {HOW_IT_WORKS.map((item) => (
+            <div
+              key={item.text}
+              className="flex flex-col items-center gap-3 rounded-lg border border-border-subtle bg-surface-raised p-6 text-center"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-recessed text-text-accent">
+                {item.icon}
+              </div>
+              <p className="font-heading text-sm font-medium text-text-primary">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </AtmosphericSection>
+
+      {/* ============================================
+          CTA — Rule 3: 1 single primary CTA
+          ============================================ */}
+      <AtmosphericSection separator className="text-center">
+        <div className="mx-auto flex max-w-xl flex-col items-center gap-6">
+          <h2 className="font-display text-2xl font-bold italic text-text-primary sm:text-3xl">
+            Rejoignez l&apos;ar&egrave;ne
+          </h2>
+          <p className="text-text-secondary">
+            R&eacute;servez votre session et commencez &agrave; grimper dans le
+            classement.
+          </p>
+          <Link href="/reserver">
+            <Button variant="danger" size="lg">
+              R&Eacute;SERVER UNE SESSION
+            </Button>
+          </Link>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/contact/layout.tsx
+=====================================
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description:
+    'Contactez l\u2019\u00e9quipe Cache Cache Killer : questions, privatisations, presse. Essonne, \u00cele-de-France.',
+  alternates: { canonical: 'https://cachecachekiller.fr/contact' },
+}
+
+export default function ContactLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return children
+}
+
+
+=====================================
+FILE: apps/site/src/app/contact/page.tsx
+=====================================
+'use client'
+
+import { useState, useCallback, useActionState } from 'react'
+import { useFormStatus } from 'react-dom'
+import Link from 'next/link'
+import {
+  AtmosphericSection,
+  Button,
+  Input,
+  IconMail,
+  IconMapPin,
+  IconInstagram,
+  IconTikTok,
+  IconFacebook,
+} from '@cck/ui'
+import {
+  submitContact,
+  type ContactState,
+} from '@/lib/actions/contact-actions'
+
+/* ============================================
+   METADATA (exported from a separate file for
+   client components — see layout or head.tsx)
+   Note: Next.js requires metadata in server
+   components. For 'use client' pages, set
+   metadata in a parent layout or use generateMetadata.
+   ============================================ */
+
+/* ============================================
+   FORM VALIDATION — Rule 7: inline at blur
+   ============================================ */
+
+interface ContactFormData {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+interface FormErrors {
+  name?: string
+  email?: string
+  subject?: string
+  message?: string
+}
+
+interface FormTouched {
+  name: boolean
+  email: boolean
+  subject: boolean
+  message: boolean
+}
+
+function validateField(
+  field: keyof ContactFormData,
+  value: string,
+): string | undefined {
+  switch (field) {
+    case 'name':
+      if (!value.trim()) return 'Le nom est requis'
+      if (value.trim().length < 2)
+        return 'Le nom doit contenir au moins 2 caract\u00e8res'
+      return undefined
+    case 'email':
+      if (!value.trim()) return "L'email est requis"
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        return "L'email n'est pas valide"
+      return undefined
+    case 'subject':
+      if (!value) return 'Veuillez s\u00e9lectionner un sujet'
+      return undefined
+    case 'message':
+      if (!value.trim()) return 'Le message est requis'
+      if (value.trim().length < 10)
+        return 'Le message doit contenir au moins 10 caract\u00e8res'
+      return undefined
+    default:
+      return undefined
+  }
+}
+
+const SUBJECT_OPTIONS = [
+  { value: '', label: 'Choisir un sujet...' },
+  { value: 'question', label: 'Question' },
+  { value: 'privatisation', label: 'Privatisation' },
+  { value: 'presse', label: 'Presse' },
+  { value: 'autre', label: 'Autre' },
+] as const
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+
+const SOCIAL_LINKS = [
+  {
+    name: 'Instagram',
+    href: 'https://instagram.com/cachecachekiller',
+    icon: <IconInstagram className="h-5 w-5" />,
+  },
+  {
+    name: 'TikTok',
+    href: 'https://tiktok.com/@cachecachekiller',
+    icon: <IconTikTok className="h-5 w-5" />,
+  },
+  {
+    name: 'Facebook',
+    href: 'https://facebook.com/cachecachekiller',
+    icon: <IconFacebook className="h-5 w-5" />,
+  },
+]
+
+/* ============================================
+   SUBMIT BUTTON — reads pending state from useFormStatus
+   ============================================ */
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <div className="pt-2">
+      <Button
+        variant="primary"
+        size="lg"
+        type="submit"
+        disabled={pending}
+        aria-disabled={pending}
+        className="w-full sm:w-auto"
+      >
+        {pending ? 'Envoi en cours...' : 'Envoyer le message'}
+      </Button>
+    </div>
+  )
+}
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function ContactPage() {
+  const [state, formAction] = useActionState<ContactState, FormData>(
+    submitContact,
+    null,
+  )
+
+  // Client-side controlled state for blur validation (Rule 7)
+  const [formValues, setFormValues] = useState<ContactFormData>({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<FormTouched>({
+    name: false,
+    email: false,
+    subject: false,
+    message: false,
+  })
+
+  const handleChange = useCallback(
+    (field: keyof ContactFormData, value: string) => {
+      setFormValues((prev) => ({ ...prev, [field]: value }))
+      setErrors((prev) => ({ ...prev, [field]: undefined }))
+    },
+    [],
+  )
+
+  const handleBlur = useCallback(
+    (field: keyof ContactFormData) => {
+      setTouched((prev) => ({ ...prev, [field]: true }))
+      const error = validateField(field, formValues[field])
+      setErrors((prev) => ({ ...prev, [field]: error }))
+    },
+    [formValues],
+  )
+
+  const isFieldValid = (field: keyof ContactFormData) =>
+    touched[field] && !errors[field] && formValues[field].trim().length > 0
+
+  /* ---- Success state ---- */
+  if (state?.success === true) {
+    return (
+      <section className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-20 text-center">
+        {/* Success icon — Rule 9: icon + text */}
+        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-feedback-success-border bg-feedback-success-bg">
+          <svg
+            className="h-8 w-8 text-feedback-success-text"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <h1 className="font-display text-3xl font-black text-text-primary sm:text-4xl">
+          Message envoy&eacute;
+        </h1>
+        <p className="max-w-md text-text-secondary">
+          Merci pour votre message ! Notre &eacute;quipe reviendra vers vous
+          dans les plus brefs d&eacute;lais (g&eacute;n&eacute;ralement sous 24
+          heures).
+        </p>
+        <Link
+          href="/"
+          className="inline-flex min-h-[48px] items-center rounded-md bg-interactive-primary px-6 py-3 font-heading font-medium text-interactive-primary-fg transition-colors duration-150 motion-reduce:transition-none hover:bg-interactive-primary-hover focus-visible:focus-ring"
+        >
+          Retour &agrave; l&apos;accueil
+        </Link>
+      </section>
+    )
+  }
+
+  return (
+    <>
+      {/* ============================================
+          HERO
+          ============================================ */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center sm:py-20">
+        <p className="font-heading text-sm uppercase tracking-widest text-text-accent">
+          &Eacute;changeons
+        </p>
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl md:text-6xl">
+          CONTACT
+        </h1>
+      </section>
+
+      {/* ============================================
+          CONTENT — Form + Sidebar
+          ============================================ */}
+      <AtmosphericSection separator>
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 lg:grid-cols-5">
+          {/* Contact form — 3 columns */}
+          <div className="lg:col-span-3">
+            <form
+              action={formAction}
+              noValidate
+              className="flex flex-col gap-5"
+            >
+              {/* Name — Rule 8: visible label */}
+              <Input
+                label="Nom complet"
+                name="name"
+                type="text"
+                value={formValues.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                onBlur={() => handleBlur('name')}
+                error={touched.name ? errors.name : undefined}
+                success={isFieldValid('name')}
+                placeholder="Jean Dupont"
+                required
+                autoComplete="name"
+                size="lg"
+              />
+
+              {/* Email */}
+              <Input
+                label="Adresse email"
+                name="email"
+                type="email"
+                value={formValues.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                onBlur={() => handleBlur('email')}
+                error={touched.email ? errors.email : undefined}
+                success={isFieldValid('email')}
+                placeholder="jean@exemple.fr"
+                required
+                autoComplete="email"
+                size="lg"
+              />
+
+              {/* Subject — Rule 8: visible label above select */}
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="contact-subject"
+                  className="text-sm font-medium text-text-primary font-body"
+                >
+                  Sujet{' '}
+                  <span
+                    className="text-feedback-danger-text"
+                    aria-hidden="true"
+                  >
+                    *
+                  </span>
+                </label>
+                <select
+                  id="contact-subject"
+                  name="subject"
+                  value={formValues.subject}
+                  onChange={(e) => handleChange('subject', e.target.value)}
+                  onBlur={() => handleBlur('subject')}
+                  aria-invalid={
+                    touched.subject && errors.subject ? 'true' : undefined
+                  }
+                  aria-describedby={
+                    touched.subject && errors.subject
+                      ? 'subject-error'
+                      : undefined
+                  }
+                  className={[
+                    'h-12 w-full rounded-md bg-night-100 px-3 font-body text-text-primary',
+                    'border outline-none transition-colors duration-150 motion-reduce:transition-none',
+                    'focus-visible:focus-ring',
+                    touched.subject && errors.subject
+                      ? 'border-feedback-danger focus:border-feedback-danger-text'
+                      : isFieldValid('subject')
+                        ? 'border-feedback-success focus:border-feedback-success-text'
+                        : 'border-night-200 focus:border-border-accent',
+                  ].join(' ')}
+                >
+                  {SUBJECT_OPTIONS.map((opt) => (
+                    <option
+                      key={opt.value}
+                      value={opt.value}
+                      className="bg-surface-raised text-text-primary"
+                    >
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                {/* Error — Rule 9: icon + text */}
+                {touched.subject && errors.subject && (
+                  <p
+                    id="subject-error"
+                    className="flex items-center gap-1 text-xs font-medium text-feedback-danger-text"
+                    role="alert"
+                  >
+                    <svg
+                      className="h-3.5 w-3.5 shrink-0"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 3.75a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zM8 11a1 1 0 100 2 1 1 0 000-2z" />
+                    </svg>
+                    {errors.subject}
+                  </p>
+                )}
+                {/* Success — Rule 9 */}
+                {isFieldValid('subject') && (
+                  <p className="flex items-center gap-1 text-xs font-medium text-feedback-success-text">
+                    <svg
+                      className="h-3.5 w-3.5 shrink-0"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.22 5.97l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
+                    </svg>
+                    Valide
+                  </p>
+                )}
+              </div>
+
+              {/* Message — Rule 8: visible label */}
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="contact-message"
+                  className="text-sm font-medium text-text-primary font-body"
+                >
+                  Message{' '}
+                  <span
+                    className="text-feedback-danger-text"
+                    aria-hidden="true"
+                  >
+                    *
+                  </span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  value={formValues.message}
+                  onChange={(e) => handleChange('message', e.target.value)}
+                  onBlur={() => handleBlur('message')}
+                  rows={5}
+                  placeholder="D&eacute;crivez votre demande..."
+                  aria-invalid={
+                    touched.message && errors.message ? 'true' : undefined
+                  }
+                  aria-describedby={
+                    touched.message && errors.message
+                      ? 'message-error'
+                      : undefined
+                  }
+                  className={[
+                    'w-full rounded-md bg-night-100 px-3 py-3 font-body text-text-primary',
+                    'border outline-none transition-colors duration-150 motion-reduce:transition-none',
+                    'placeholder:text-text-muted resize-y',
+                    'focus-visible:focus-ring',
+                    touched.message && errors.message
+                      ? 'border-feedback-danger focus:border-feedback-danger-text'
+                      : isFieldValid('message')
+                        ? 'border-feedback-success focus:border-feedback-success-text'
+                        : 'border-night-200 focus:border-border-accent',
+                  ].join(' ')}
+                />
+                {/* Error */}
+                {touched.message && errors.message && (
+                  <p
+                    id="message-error"
+                    className="flex items-center gap-1 text-xs font-medium text-feedback-danger-text"
+                    role="alert"
+                  >
+                    <svg
+                      className="h-3.5 w-3.5 shrink-0"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 3.75a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zM8 11a1 1 0 100 2 1 1 0 000-2z" />
+                    </svg>
+                    {errors.message}
+                  </p>
+                )}
+                {/* Success */}
+                {isFieldValid('message') && (
+                  <p className="flex items-center gap-1 text-xs font-medium text-feedback-success-text">
+                    <svg
+                      className="h-3.5 w-3.5 shrink-0"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.22 5.97l-3.5 3.5a.75.75 0 01-1.06 0l-1.5-1.5a.75.75 0 111.06-1.06l.97.97 2.97-2.97a.75.75 0 111.06 1.06z" />
+                    </svg>
+                    Valide
+                  </p>
+                )}
+              </div>
+
+              {/* Server-side error — Rule 9: icon + text */}
+              {state?.success === false && (
+                <div
+                  className="flex items-start gap-2 rounded-md border border-feedback-danger bg-feedback-danger-bg px-4 py-3"
+                  role="alert"
+                  aria-live="assertive"
+                >
+                  <svg
+                    className="mt-0.5 h-4 w-4 shrink-0 text-feedback-danger-text"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 3.75a.75.75 0 011.5 0v3.5a.75.75 0 01-1.5 0v-3.5zM8 11a1 1 0 100 2 1 1 0 000-2z" />
+                  </svg>
+                  <p className="text-sm font-medium text-feedback-danger-text">
+                    {state.error}
+                  </p>
+                </div>
+              )}
+
+              {/* Submit — Rule 3: 1 primary CTA, Rule 1: 48px touch target */}
+              <SubmitButton />
+            </form>
+          </div>
+
+          {/* Sidebar info — 2 columns */}
+          <div className="flex flex-col gap-8 lg:col-span-2">
+            {/* Email */}
+            <div>
+              <h2 className="mb-3 font-heading text-lg font-bold text-text-primary">
+                Email
+              </h2>
+              <a
+                href="mailto:contact@cachecachekiller.fr"
+                className="inline-flex min-h-[48px] items-center gap-2 text-sm text-text-primary transition-colors duration-150 motion-reduce:transition-none hover:text-text-accent"
+              >
+                <IconMail className="h-4 w-4 shrink-0 text-text-accent" />
+                contact@cachecachekiller.fr
+              </a>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h2 className="mb-3 font-heading text-lg font-bold text-text-primary">
+                R&eacute;seaux sociaux
+              </h2>
+              <ul className="flex flex-col gap-3">
+                {SOCIAL_LINKS.map((social) => (
+                  <li key={social.name}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-[48px] items-center gap-2 text-sm text-text-primary transition-colors duration-150 motion-reduce:transition-none hover:text-text-accent"
+                    >
+                      <span className="shrink-0 text-text-accent">
+                        {social.icon}
+                      </span>
+                      {social.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Location */}
+            <div>
+              <h2 className="mb-3 font-heading text-lg font-bold text-text-primary">
+                Localisation
+              </h2>
+              <div className="flex items-start gap-2 text-sm text-text-primary">
+                <IconMapPin className="mt-0.5 h-4 w-4 shrink-0 text-text-accent" />
+                <address className="not-italic leading-relaxed">
+                  <strong>Cache Cache Killer</strong>
+                  <br />
+                  Essonne, &Icirc;le-de-France
+                  <br />
+                  <span className="text-text-secondary">
+                    Adresse exacte communiqu&eacute;e &agrave; l&apos;ouverture
+                    (octobre 2026)
+                  </span>
+                </address>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/cgv/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import { AtmosphericSection } from '@cck/ui'
+
+export const metadata: Metadata = {
+  title: 'Conditions G\u00e9n\u00e9rales de Vente',
+  description:
+    'Conditions g\u00e9n\u00e9rales de vente de Cache Cache Killer \u2014 escape game et laser tag en Essonne, \u00cele-de-France. Tarifs, r\u00e9servations, annulations, CCK Coins.',
+  alternates: { canonical: 'https://cachecachekiller.fr/cgv' },
+}
+
+/* ============================================
+   LEGAL SECTION COMPONENT
+   ============================================ */
+
+function LegalSection({
+  id,
+  title,
+  children,
+}: {
+  id?: string
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <section id={id} className="scroll-mt-20">
+      <h2 className="mb-4 font-heading text-xl font-bold text-text-accent sm:text-2xl">
+        {title}
+      </h2>
+      <div className="flex flex-col gap-3 text-sm leading-relaxed text-text-primary">
+        {children}
+      </div>
+    </section>
+  )
+}
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function CgvPage() {
+  return (
+    <>
+      {/* Hero */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center sm:py-20">
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl">
+          Conditions G&eacute;n&eacute;rales de Vente
+        </h1>
+        <p className="text-text-secondary">
+          Derni&egrave;re mise &agrave; jour : 1er f&eacute;vrier 2026
+        </p>
+      </section>
+
+      {/* Content */}
+      <AtmosphericSection separator>
+        <div className="mx-auto flex max-w-3xl flex-col gap-10">
+
+          {/* Preambule */}
+          <p className="text-sm leading-relaxed text-text-secondary">
+            Les pr&eacute;sentes Conditions G&eacute;n&eacute;rales de Vente
+            (ci-apr&egrave;s &laquo;&nbsp;CGV&nbsp;&raquo;) r&eacute;gissent
+            les relations contractuelles entre la soci&eacute;t&eacute; SAS
+            Cache Cache Killer et toute personne physique (ci-apr&egrave;s
+            &laquo;&nbsp;le Client&nbsp;&raquo;) souhaitant r&eacute;server ou
+            participer aux activit&eacute;s propos&eacute;es. Toute
+            r&eacute;servation implique l&apos;acceptation pleine et
+            enti&egrave;re des pr&eacute;sentes CGV.
+          </p>
+
+          {/* 1. Objet */}
+          <LegalSection id="objet" title="1. Objet">
+            <p>
+              Les pr&eacute;sentes CGV ont pour objet de d&eacute;finir les
+              conditions dans lesquelles SAS Cache Cache Killer (ci-apr&egrave;s
+              &laquo;&nbsp;CCK&nbsp;&raquo;), soci&eacute;t&eacute; par Actions
+              Simplifi&eacute;e au capital de 21&nbsp;000&nbsp;euros,
+              situ&eacute;e en Essonne, &Icirc;le-de-France, propose &agrave;
+              ses clients la r&eacute;servation et la participation &agrave; ses
+              activit&eacute;s de loisirs immersifs&nbsp;: escape game et laser
+              tag.
+            </p>
+            <p>
+              CCK est un parc th&eacute;matique gamifi&eacute; op&eacute;rant
+              sous l&apos;univers fictif &laquo;&nbsp;Cirque
+              D&eacute;lav&eacute;&nbsp;&raquo;. L&apos;ouverture au public est
+              pr&eacute;vue pour octobre 2026.
+            </p>
+            <p>
+              Les pr&eacute;sentes CGV s&apos;appliquent &agrave;
+              l&apos;exclusion de toutes autres conditions, notamment celles en
+              vigueur chez le Client. CCK se r&eacute;serve le droit de
+              modifier ses CGV &agrave; tout moment&nbsp;; les CGV applicables
+              sont celles en vigueur &agrave; la date de la r&eacute;servation.
+            </p>
+          </LegalSection>
+
+          {/* 2. Tarifs et modalites */}
+          <LegalSection id="tarifs" title="2. Tarifs et Modalit&eacute;s">
+            <p>
+              Tous les prix sont indiqu&eacute;s en euros, toutes taxes
+              comprises (TTC). Les activit&eacute;s de type escape game et laser
+              tag sont soumises &agrave; la TVA au taux r&eacute;duit de
+              10&nbsp;% conform&eacute;ment &agrave; l&apos;article 279 b nonies
+              du Code G&eacute;n&eacute;ral des Imp&ocirc;ts.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              2.1 Tarif standard
+            </h3>
+            <p>
+              <strong>18&nbsp;&euro; par personne</strong> pour toute session
+              r&eacute;serv&eacute;e aux horaires de pointe.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              2.2 Tarif heures creuses
+            </h3>
+            <p>
+              <strong>12&nbsp;&euro; par personne</strong> pour les sessions
+              r&eacute;serv&eacute;es sur les cr&eacute;neaux d&eacute;finis
+              comme heures creuses sur le site de r&eacute;servation. Les
+              cr&eacute;neaux heures creuses sont affich&eacute;s lors du
+              processus de r&eacute;servation en ligne et peuvent &eacute;voluer
+              selon la saison.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              2.3 Privatisations
+            </h3>
+            <p>
+              La r&eacute;servation exclusive du parc ou d&apos;une zone
+              d&eacute;di&eacute;e est possible sur devis. Contactez-nous
+              &agrave; l&apos;adresse{' '}
+              <a
+                href="mailto:contact@cachecachekiller.fr"
+                className="text-text-link hover:underline"
+              >
+                contact@cachecachekiller.fr
+              </a>{' '}
+              pour toute demande de privatisation (groupes, entreprises,
+              &eacute;v&eacute;nements).
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              2.4 Dur&eacute;e et format des sessions
+            </h3>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>Dur&eacute;e d&apos;une session&nbsp;: environ 20 minutes</li>
+              <li>Nombre de joueurs&nbsp;: 2 &agrave; 10 par session</li>
+              <li>
+                Les sessions se d&eacute;roulent selon les scenarios
+                propos&eacute;s par CCK, susceptibles d&apos;&eacute;voluer
+              </li>
+            </ul>
+
+            <p>
+              CCK se r&eacute;serve le droit de modifier ses tarifs &agrave;
+              tout moment. Le tarif applicable est celui affich&eacute; lors de
+              la validation de la commande.
+            </p>
+          </LegalSection>
+
+          {/* 3. Reservations */}
+          <LegalSection id="reservations" title="3. R&eacute;servations">
+            <p>
+              Les r&eacute;servations s&apos;effectuent exclusivement en ligne
+              sur le site{' '}
+              <a
+                href="https://cachecachekiller.fr/reserver"
+                className="text-text-link hover:underline"
+              >
+                cachecachekiller.fr/reserver
+              </a>
+              . Aucune r&eacute;servation par t&eacute;l&eacute;phone ou email
+              n&apos;est garantie sauf mention contraire.
+            </p>
+            <p>
+              La r&eacute;servation est confirm&eacute;e d&egrave;s
+              r&eacute;ception du paiement int&eacute;gral. Un email de
+              confirmation est automatiquement envoy&eacute; &agrave;
+              l&apos;adresse fournie par le Client. Cet email constitue la
+              preuve de r&eacute;servation.
+            </p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                Capacit&eacute; maximale&nbsp;: 10 joueurs par session
+              </li>
+              <li>
+                Toute r&eacute;servation est nominative et non cessible sans
+                accord pr&eacute;alable de CCK
+              </li>
+              <li>
+                CCK se r&eacute;serve le droit de refuser toute
+                r&eacute;servation incompatible avec les r&egrave;gles de
+                s&eacute;curit&eacute; ou de bon fonctionnement du parc
+              </li>
+            </ul>
+            <p>
+              En cas d&apos;indisponibilit&eacute; technique du site de
+              r&eacute;servation, le Client peut contacter CCK par email pour
+              obtenir une assistance.
+            </p>
+          </LegalSection>
+
+          {/* 4. Paiement */}
+          <LegalSection id="paiement" title="4. Paiement">
+            <p>
+              Le paiement s&apos;effectue int&eacute;gralement au moment de la
+              r&eacute;servation, par l&apos;interm&eacute;diaire de la
+              solution de paiement s&eacute;curis&eacute;e{' '}
+              <strong>Stripe</strong>, certifi&eacute;e PCI DSS. Les
+              donn&eacute;es bancaires du Client ne sont ni
+              stock&eacute;es ni accessibles par CCK.
+            </p>
+            <p>Moyens de paiement accept&eacute;s&nbsp;:</p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>Carte bancaire (Visa, Mastercard, American Express)</li>
+              <li>Apple Pay</li>
+              <li>Google Pay</li>
+              <li>
+                CCK Coins (monnaie virtuelle pr&eacute;pay&eacute;e CCK&nbsp;;
+                voir section 8)
+              </li>
+            </ul>
+            <p>
+              En cas d&apos;&eacute;chec du paiement, la r&eacute;servation
+              n&apos;est pas confirm&eacute;e et le cr&eacute;neau choisi peut
+              &ecirc;tre lib&eacute;r&eacute;. Le Client est invit&eacute;
+              &agrave; recommencer la proc&eacute;dure.
+            </p>
+          </LegalSection>
+
+          {/* 5. Annulation et remboursement */}
+          <LegalSection
+            id="annulation"
+            title="5. Annulation et Remboursement"
+          >
+            <p>
+              Toute demande d&apos;annulation doit &ecirc;tre adress&eacute;e
+              par email &agrave;{' '}
+              <a
+                href="mailto:contact@cachecachekiller.fr"
+                className="text-text-link hover:underline"
+              >
+                contact@cachecachekiller.fr
+              </a>{' '}
+              en indiquant le num&eacute;ro de r&eacute;servation.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              5.1 Barème d&apos;annulation
+            </h3>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                <strong>Plus de 48 heures avant la session&nbsp;:</strong>{' '}
+                remboursement int&eacute;gral du montant pay&eacute;.
+              </li>
+              <li>
+                <strong>Entre 24 et 48 heures avant la session&nbsp;:</strong>{' '}
+                remboursement de 50&nbsp;% du montant pay&eacute;.
+              </li>
+              <li>
+                <strong>Moins de 24 heures avant la session&nbsp;:</strong>{' '}
+                aucun remboursement. Le montant reste acquis &agrave; CCK.
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              5.2 Annulation &agrave; l&apos;initiative de CCK
+            </h3>
+            <p>
+              En cas d&apos;annulation d&apos;une session par CCK
+              (force majeure, probl&egrave;me technique, s&eacute;curit&eacute;),
+              le Client sera rembours&eacute; int&eacute;gralement ou pourra
+              choisir de reporter sa r&eacute;servation sans frais.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              5.3 CCK Coins
+            </h3>
+            <p>
+              Les CCK Coins utilis&eacute;s pour r&eacute;server une session
+              sont non remboursables en esp&egrave;ces. En cas d&apos;annulation
+              &eacute;ligible au remboursement, les CCK Coins sont
+              recr&eacute;dit&eacute;s sur le compte du joueur selon les
+              m&ecirc;mes barèmes que ci-dessus.
+            </p>
+
+            <p>
+              Les remboursements en euros sont effectu&eacute;s sur le moyen de
+              paiement utilis&eacute; lors de la r&eacute;servation, dans un
+              d&eacute;lai de 5 &agrave; 10 jours ouvrables.
+            </p>
+          </LegalSection>
+
+          {/* 6. Responsabilite */}
+          <LegalSection id="responsabilite" title="6. Responsabilit&eacute;">
+            <p>
+              Les activit&eacute;s propos&eacute;es par CCK (escape game, laser
+              tag) sont des activit&eacute;s physiques impliquant des
+              d&eacute;placements dans des espaces sc&eacute;nographi&eacute;s,
+              avec une luminosit&eacute; r&eacute;duite et des effets
+              sp&eacute;ciaux (lumi&egrave;res stroboscopiques, effets sonores).
+            </p>
+            <p>
+              Le Client d&eacute;clare &ecirc;tre inform&eacute; de la nature
+              physique des activit&eacute;s et atteste ne pas souffrir de
+              contre-indications m&eacute;dicales (epilepsie, troubles
+              cardiaques, claustrophobie s&eacute;v&egrave;re, grossesse, etc.)
+              pouvant le placer en danger. CCK ne saurait &ecirc;tre tenu
+              responsable de tout dommage corporel ou mat&eacute;riel
+              r&eacute;sultant d&apos;une non-divulgation de ces
+              contre-indications.
+            </p>
+            <p>
+              Un reglement int&eacute;rieur est affich&eacute; dans les locaux
+              et disponible sur le site. Le Client s&apos;engage &agrave; le
+              respecter. Tout manquement grave peut entra&icirc;ner
+              l&apos;exclusion du Client sans remboursement.
+            </p>
+            <p>
+              CCK dispose d&apos;une assurance responsabilit&eacute; civile
+              professionnelle couvrant les dommages susceptibles
+              d&apos;&ecirc;tre caus&eacute;s aux participants dans le cadre
+              normal de l&apos;activit&eacute;. La responsabilit&eacute; de
+              CCK ne saurait &ecirc;tre engag&eacute;e au-del&agrave; des
+              garanties pr&eacute;vues par ce contrat d&apos;assurance.
+            </p>
+            <p>
+              CCK ne peut &ecirc;tre tenu responsable des objets personnels
+              perdus, vols ou endommag&eacute;s dans ses locaux. Des
+              consignes sont disponibles &agrave; l&apos;accueil.
+            </p>
+          </LegalSection>
+
+          {/* 7. Mineurs */}
+          <LegalSection id="mineurs" title="7. Mineurs">
+            <p>
+              L&apos;acc&egrave;s aux activit&eacute;s de CCK est r&eacute;serv&eacute;
+              aux personnes &acirc;g&eacute;es de <strong>12 ans minimum</strong>.
+            </p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                <strong>12 &agrave; 14 ans (r&eacute;volus)&nbsp;:</strong>{' '}
+                participation autoris&eacute;e uniquement en pr&eacute;sence
+                d&apos;un adulte responsable (parent ou tuteur l&eacute;gal)
+                participant &agrave; la m&ecirc;me session. Une autorisation
+                parentale sign&eacute;e est obligatoire.
+              </li>
+              <li>
+                <strong>15 &agrave; 17 ans&nbsp;:</strong> participation
+                autoris&eacute;e avec autorisation parentale sign&eacute;e.
+                La pr&eacute;sence physique d&apos;un adulte n&apos;est pas
+                obligatoire mais recommand&eacute;e.
+              </li>
+              <li>
+                <strong>18 ans et plus&nbsp;:</strong> participation sans
+                restriction.
+              </li>
+            </ul>
+            <p>
+              L&apos;autorisation parentale doit &ecirc;tre pr&eacute;sent&eacute;e
+              &agrave; l&apos;accueil le jour de la session. En
+              l&apos;absence de ce document, CCK se r&eacute;serve le droit
+              de refuser l&apos;acc&egrave;s au mineur, sans remboursement.
+            </p>
+            <p>
+              Conform&eacute;ment &agrave; l&apos;article 8 du RGPD, le
+              traitement des donn&eacute;es personnelles des joueurs de moins
+              de 15 ans requiert le consentement du titulaire de
+              l&apos;autorit&eacute; parentale.
+            </p>
+          </LegalSection>
+
+          {/* 8. CCK Coins */}
+          <LegalSection id="cck-coins" title="8. CCK Coins">
+            <p>
+              Les CCK Coins sont une monnaie virtuelle pr&eacute;pay&eacute;e,
+              utilisable exclusivement sur le site et dans les services de CCK.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              8.1 Nature comptable et fiscale
+            </h3>
+            <p>
+              L&apos;achat de CCK Coins ne constitue pas un achat de
+              prestation de service. Les fonds correspondants sont
+              enregistr&eacute;s en tant que Produits Constat&eacute;s
+              d&apos;Avance (compte 4871 &mdash; passif) et ne sont
+              reconnus comme chiffre d&apos;affaires qu&apos;au moment de
+              leur utilisation effective pour r&eacute;server une activit&eacute;.
+              Les CCK Coins ne sont donc pas soumis &agrave; la TVA
+              &agrave; l&apos;achat.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              8.2 Utilisation
+            </h3>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                Les CCK Coins peuvent &ecirc;tre utilis&eacute;s pour
+                r&eacute;server des sessions, acheter des options ou du
+                merchandising propos&eacute;s par CCK.
+              </li>
+              <li>
+                Les CCK Coins ne sont pas convertibles en monnaie r&eacute;elle
+                et ne peuvent pas faire l&apos;objet d&apos;un remboursement
+                en esp&egrave;ces, sauf disposition l&eacute;gale contraire.
+              </li>
+              <li>
+                Les CCK Coins sont strictement personnels et non cessibles
+                &agrave; un tiers.
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              8.3 Validit&eacute;
+            </h3>
+            <p>
+              Les CCK Coins ont une dur&eacute;e de validit&eacute; de{' '}
+              <strong>12 mois</strong> &agrave; compter de leur date d&apos;achat.
+              Pass&eacute; ce d&eacute;lai, les coins non utilis&eacute;s sont
+              d&eacute;finitivement perdus et ne peuvent faire l&apos;objet
+              d&apos;aucune compensation. CCK s&apos;engage &agrave; notifier
+              le Client par email 30 jours avant l&apos;expiration de ses coins.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              8.4 Cas de clôture du compte
+            </h3>
+            <p>
+              En cas de clôture d&apos;un compte joueur &agrave; l&apos;initiative
+              du Client, les CCK Coins restants sont d&eacute;finitivement
+              perdus. En cas de fermeture de CCK, les CCK Coins non
+              utilis&eacute;s feront l&apos;objet d&apos;un remboursement
+              conform&eacute;ment aux obligations l&eacute;gales applicables.
+            </p>
+          </LegalSection>
+
+          {/* 9. Droit applicable */}
+          <LegalSection id="droit-applicable" title="9. Droit Applicable">
+            <p>
+              Les pr&eacute;sentes CGV sont soumises au droit
+              fran&ccedil;ais.
+            </p>
+            <p>
+              En cas de litige relatif &agrave; la formation, &agrave;
+              l&apos;interpr&eacute;tation ou &agrave; l&apos;ex&eacute;cution
+              des pr&eacute;sentes CGV, les parties s&apos;efforceront de
+              trouver une solution amiable. &Agrave; d&eacute;faut, le litige
+              sera port&eacute; devant le Tribunal de commerce d&apos;&Eacute;vry
+              (Essonne), seul comp&eacute;tent.
+            </p>
+            <p>
+              Pour les litiges de consommation, le Client peut &eacute;galement
+              recourir &agrave; la proc&eacute;dure de m&eacute;diation
+              pr&eacute;vue aux articles L.612-1 et suivants du Code de la
+              consommation. Les coordonn&eacute;es du m&eacute;diateur
+              comp&eacute;tent sont disponibles sur demande aupr&egrave;s de
+              CCK.
+            </p>
+            <p>
+              La Commission europ&eacute;enne met &eacute;galement &agrave;
+              disposition une plateforme de r&egrave;glement en ligne des
+              litiges (RLL) accessible &agrave; l&apos;adresse&nbsp;:{' '}
+              <a
+                href="https://ec.europa.eu/consumers/odr"
+                className="text-text-link hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ec.europa.eu/consumers/odr
+              </a>
+              .
+            </p>
+          </LegalSection>
+
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/mentions-legales/page.tsx
+=====================================
+import type { Metadata } from 'next'
+import { AtmosphericSection } from '@cck/ui'
+
+export const metadata: Metadata = {
+  title: 'Mentions L\u00e9gales',
+  description:
+    'Mentions l\u00e9gales, politique de confidentialit\u00e9 et informations RGPD de Cache Cache Killer.',
+  alternates: { canonical: 'https://cachecachekiller.fr/mentions-legales' },
+}
+
+/* ============================================
+   LEGAL SECTION COMPONENT
+   ============================================ */
+
+function LegalSection({
+  id,
+  title,
+  children,
+}: {
+  id?: string
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <section id={id} className="scroll-mt-20">
+      <h2 className="mb-4 font-heading text-xl font-bold text-text-accent sm:text-2xl">
+        {title}
+      </h2>
+      <div className="flex flex-col gap-3 text-sm leading-relaxed text-text-primary">
+        {children}
+      </div>
+    </section>
+  )
+}
+
+/* ============================================
+   PAGE COMPONENT
+   ============================================ */
+
+export default function MentionsLegalesPage() {
+  return (
+    <>
+      {/* Hero */}
+      <section className="flex flex-col items-center gap-4 px-4 py-16 text-center sm:py-20">
+        <h1 className="font-display text-4xl font-black text-text-primary sm:text-5xl">
+          Mentions L&eacute;gales
+        </h1>
+        <p className="text-text-secondary">
+          Derni&egrave;re mise &agrave; jour : 1er f&eacute;vrier 2026
+        </p>
+      </section>
+
+      {/* Content */}
+      <AtmosphericSection separator>
+        <div className="mx-auto flex max-w-3xl flex-col gap-10">
+          {/* 1. Editeur */}
+          <LegalSection title="1. &Eacute;diteur du site">
+            <p>
+              <strong>Raison sociale :</strong> SAS Cache Cache Killer
+            </p>
+            <p>
+              <strong>Forme juridique :</strong> Soci&eacute;t&eacute; par
+              Actions Simplifi&eacute;e (SAS)
+            </p>
+            <p>
+              <strong>Capital social :</strong> 21 000 euros
+            </p>
+            <p>
+              <strong>Associ&eacute;s :</strong> 3 associ&eacute;s &agrave;
+              33,33% chacun
+            </p>
+            <ul className="list-inside list-disc pl-4 text-text-secondary">
+              <li>
+                Olivier Giupponi &mdash; Pr&eacute;sident & Directeur
+                Cr&eacute;atif
+              </li>
+              <li>
+                Mathieu Sardin &mdash; Directeur G&eacute;n&eacute;ral
+              </li>
+              <li>
+                Yannick Giupponi &mdash; Directeur Financier &
+                Strat&eacute;gique
+              </li>
+            </ul>
+            <p>
+              <strong>Si&egrave;ge social :</strong> Essonne,
+              &Icirc;le-de-France
+            </p>
+            <p>
+              <strong>SIREN :</strong> En cours d&apos;immatriculation
+            </p>
+            <p>
+              <strong>Directeur de la publication :</strong> Olivier Giupponi,
+              Pr&eacute;sident de SAS Cache Cache Killer
+            </p>
+            <p>
+              <strong>Email :</strong>{' '}
+              <a
+                href="mailto:contact@cachecachekiller.fr"
+                className="text-text-link hover:underline"
+              >
+                contact@cachecachekiller.fr
+              </a>
+            </p>
+          </LegalSection>
+
+          {/* 2. Hebergeur */}
+          <LegalSection title="2. H&eacute;bergement">
+            <p>Le site cachecachekiller.fr est h&eacute;berg&eacute; par :</p>
+            <p>
+              <strong>Vercel Inc.</strong>
+              <br />
+              440 N Barranca Ave #4133, Covina, CA 91723, USA
+            </p>
+            <p>
+              R&eacute;gion de d&eacute;ploiement :{' '}
+              <strong>cdg1 (Paris, France)</strong> &mdash; conform&eacute;ment
+              &agrave; notre engagement EU-first pour la localisation des
+              donn&eacute;es.
+            </p>
+            <p>
+              <strong>Base de donn&eacute;es :</strong> Supabase (r&eacute;gion
+              eu-west-3 Paris) &mdash; service soumis &agrave; un DPA (Data
+              Processing Agreement) sign&eacute;.
+            </p>
+          </LegalSection>
+
+          {/* 3. Propriete intellectuelle */}
+          <LegalSection title="3. Propri&eacute;t&eacute; intellectuelle">
+            <p>
+              L&apos;ensemble du contenu du site (textes, images, graphismes,
+              logo, ic&ocirc;nes, sons, logiciels) est la propri&eacute;t&eacute;
+              exclusive de SAS Cache Cache Killer ou de ses partenaires. Toute
+              reproduction, repr&eacute;sentation, modification, publication ou
+              adaptation de tout ou partie des &eacute;l&eacute;ments du site
+              est interdite sans autorisation &eacute;crite pr&eacute;alable.
+            </p>
+            <p>
+              La marque &laquo; Cache Cache Killer &raquo; et le logo
+              associ&eacute; sont des marques d&eacute;pos&eacute;es. Toute
+              utilisation non autoris&eacute;e constitue une contrefa&ccedil;on
+              sanctionn&eacute;e par les articles L.713-2 et suivants du Code de
+              la propri&eacute;t&eacute; intellectuelle.
+            </p>
+          </LegalSection>
+
+          {/* 4. RGPD */}
+          <LegalSection
+            id="rgpd"
+            title="4. Protection des donn&eacute;es personnelles (RGPD)"
+          >
+            <p>
+              Conform&eacute;ment au R&egrave;glement G&eacute;n&eacute;ral sur
+              la Protection des Donn&eacute;es (RGPD &mdash; R&egrave;glement UE
+              2016/679) et &agrave; la loi Informatique et Libert&eacute;s du 6
+              janvier 1978 modifi&eacute;e, SAS Cache Cache Killer
+              s&apos;engage &agrave; prot&eacute;ger vos donn&eacute;es
+              personnelles.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.1 Donn&eacute;es collect&eacute;es
+            </h3>
+            <p>
+              Nous collectons les donn&eacute;es strictement n&eacute;cessaires
+              au fonctionnement de nos services :
+            </p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                Donn&eacute;es d&apos;identification : nom, pr&eacute;nom,
+                email, t&eacute;l&eacute;phone
+              </li>
+              <li>
+                Donn&eacute;es de r&eacute;servation : date, cr&eacute;neau,
+                nombre de joueurs
+              </li>
+              <li>
+                Donn&eacute;es de jeu : scores, XP, badges, classement
+                (pseudonymis&eacute;es)
+              </li>
+              <li>
+                Donn&eacute;es de paiement : trait&eacute;es exclusivement par
+                Stripe (PCI DSS)
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.2 Base l&eacute;gale et finalit&eacute;s
+            </h3>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                Ex&eacute;cution du contrat : gestion des r&eacute;servations et
+                du compte joueur
+              </li>
+              <li>
+                Consentement : envoi de communications marketing (opt-in)
+              </li>
+              <li>
+                Int&eacute;r&ecirc;t l&eacute;gitime : am&eacute;lioration du
+                service, s&eacute;curit&eacute;
+              </li>
+              <li>
+                Obligation l&eacute;gale : facturation, comptabilit&eacute;
+                (FEC)
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.3 Vos droits
+            </h3>
+            <p>
+              Vous disposez des droits suivants sur vos donn&eacute;es
+              personnelles :
+            </p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                <strong>Droit d&apos;acc&egrave;s :</strong> obtenir une copie
+                de vos donn&eacute;es
+              </li>
+              <li>
+                <strong>Droit de rectification :</strong> corriger des
+                donn&eacute;es inexactes
+              </li>
+              <li>
+                <strong>Droit de suppression :</strong> demander
+                l&apos;effacement de vos donn&eacute;es
+              </li>
+              <li>
+                <strong>Droit &agrave; la portabilit&eacute; :</strong> recevoir
+                vos donn&eacute;es dans un format structur&eacute; et lisible
+              </li>
+              <li>
+                <strong>Droit d&apos;opposition :</strong> vous opposer au
+                traitement de vos donn&eacute;es
+              </li>
+              <li>
+                <strong>Droit &agrave; la limitation :</strong> restreindre le
+                traitement dans certains cas
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.4 Mineurs
+            </h3>
+            <p>
+              Pour les joueurs de moins de 15 ans, le consentement parental est
+              requis pour la cr&eacute;ation d&apos;un compte et le traitement
+              des donn&eacute;es. Un m&eacute;canisme de v&eacute;rification est
+              en place conform&eacute;ment &agrave; l&apos;article 8 du RGPD.
+            </p>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.5 Dur&eacute;e de conservation
+            </h3>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>
+                Compte joueur actif : dur&eacute;e de l&apos;inscription + 3 ans
+                apr&egrave;s inactivit&eacute;
+              </li>
+              <li>
+                Donn&eacute;es de facturation : 10 ans (obligation comptable)
+              </li>
+              <li>
+                Donn&eacute;es de navigation : 13 mois maximum (analytics)
+              </li>
+              <li>
+                Cam&eacute;ras de s&eacute;curit&eacute; : 48 heures
+              </li>
+            </ul>
+
+            <h3 className="mt-2 font-heading font-semibold text-text-primary">
+              4.6 Sous-traitants
+            </h3>
+            <p>
+              Tous nos sous-traitants disposent d&apos;un DPA (Data Processing
+              Agreement) sign&eacute;. Aucun transfert de donn&eacute;es hors UE
+              sans garanties ad&eacute;quates :
+            </p>
+            <ul className="list-inside list-disc text-text-secondary">
+              <li>Supabase &mdash; Base de donn&eacute;es (r&eacute;gion EU Paris)</li>
+              <li>Stripe &mdash; Paiement (certifi&eacute; PCI DSS)</li>
+              <li>Vercel &mdash; H&eacute;bergement (r&eacute;gion cdg1 Paris)</li>
+              <li>Brevo &mdash; Email transactionnel (serveurs FR)</li>
+              <li>
+                Plausible &mdash; Analytics (cookie-free, serveurs EU)
+              </li>
+            </ul>
+          </LegalSection>
+
+          {/* 5. DPO */}
+          <LegalSection title="5. D&eacute;l&eacute;gu&eacute; &agrave; la Protection des Donn&eacute;es (DPO)">
+            <p>
+              Pour exercer vos droits ou pour toute question relative &agrave; la
+              protection de vos donn&eacute;es personnelles, contactez notre
+              DPO :
+            </p>
+            <p>
+              <strong>Email :</strong>{' '}
+              <a
+                href="mailto:dpo@cachecachekiller.fr"
+                className="text-text-link hover:underline"
+              >
+                dpo@cachecachekiller.fr
+              </a>
+            </p>
+            <p>
+              <strong>Courrier :</strong> DPO &mdash; SAS Cache Cache Killer,
+              Essonne, &Icirc;le-de-France
+            </p>
+            <p>
+              En cas de litige, vous pouvez introduire une r&eacute;clamation
+              aupr&egrave;s de la CNIL (Commission Nationale de
+              l&apos;Informatique et des Libert&eacute;s) :{' '}
+              <a
+                href="https://www.cnil.fr"
+                className="text-text-link hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                www.cnil.fr
+              </a>
+            </p>
+          </LegalSection>
+
+          {/* 6. Cookies */}
+          <LegalSection id="cookies" title="6. Cookies et traceurs">
+            <p>
+              Le site cachecachekiller.fr utilise{' '}
+              <strong>Plausible Analytics</strong>, une solution de mesure
+              d&apos;audience <strong>sans cookie</strong> ni traceur
+              persistant. Plausible ne collecte aucune donn&eacute;e personnelle
+              identifiable et n&apos;utilise pas de cookie de suivi.
+            </p>
+            <p>
+              En application de la d&eacute;lib&eacute;ration CNIL
+              n&deg;&nbsp;2020-091 du 17 septembre 2020, les outils
+              d&apos;analytics exempt&eacute;s de consentement sont ceux dont
+              les donn&eacute;es sont strictement limit&eacute;es &agrave; la
+              mesure d&apos;audience, ne permettent pas le suivi
+              inter-sites et dont les donn&eacute;es ne sont pas
+              recoup&eacute;es avec d&apos;autres traitements. Plausible remplit
+              l&apos;ensemble de ces crit&egrave;res : <strong>aucune
+              banniere de consentement n&apos;est donc requise</strong> pour cet
+              outil.
+            </p>
+            <p>
+              Le seul cookie d&eacute;pos&eacute; sur votre navigateur est un
+              cookie de session d&apos;authentification, strictement
+              n&eacute;cessaire au fonctionnement du compte joueur. Ce cookie
+              est exempt&eacute; de consentement conform&eacute;ment aux
+              recommandations de la CNIL.
+            </p>
+            <p>
+              Aucun cookie publicitaire, aucun pixel de suivi tiers et aucun
+              outil de profilage ne sont utilis&eacute;s sur ce site.
+            </p>
+          </LegalSection>
+
+          {/* 7. Limitation de responsabilite */}
+          <LegalSection title="7. Limitation de responsabilit&eacute;">
+            <p>
+              SAS Cache Cache Killer s&apos;efforce d&apos;assurer
+              l&apos;exactitude des informations diffus&eacute;es sur le site.
+              Toutefois, elle ne saurait &ecirc;tre tenue responsable des
+              omissions, inexactitudes ou carences dans la mise &agrave; jour.
+            </p>
+            <p>
+              L&apos;utilisateur est seul responsable de l&apos;utilisation
+              qu&apos;il fait du site et des informations qui y figurent.
+            </p>
+          </LegalSection>
+
+          {/* 8. Droit applicable */}
+          <LegalSection title="8. Droit applicable et juridiction">
+            <p>
+              Les pr&eacute;sentes mentions l&eacute;gales sont r&eacute;gies
+              par le droit fran&ccedil;ais. En cas de litige, et apr&egrave;s
+              tentative de r&eacute;solution amiable, les tribunaux
+              comp&eacute;tents d&apos;&Eacute;vry (Essonne) seront seuls
+              comp&eacute;tents.
+            </p>
+          </LegalSection>
+        </div>
+      </AtmosphericSection>
+    </>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/opengraph-image.tsx
+=====================================
+import { ImageResponse } from 'next/og'
+
+export const runtime = 'edge'
+export const alt = 'Cache Cache Killer — Survival Grandeur Nature'
+export const size = { width: 1200, height: 630 }
+export const contentType = 'image/png'
+
+async function loadBodoniModa(): Promise<ArrayBuffer | null> {
+  try {
+    const css = await fetch(
+      'https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@900',
+      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NextJS/15)' } },
+    ).then((res) => res.text())
+
+    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/)
+    if (!match?.[1]) return null
+
+    return await fetch(match[1]).then((res) => res.arrayBuffer())
+  } catch {
+    return null
+  }
+}
+
+export default async function Image() {
+  const fontData = await loadBodoniModa()
+
+  const fonts: NonNullable<ConstructorParameters<typeof ImageResponse>[1]>['fonts'] = fontData
+    ? [{ name: 'Bodoni Moda', data: fontData, weight: 900, style: 'normal' }]
+    : []
+
+  const brandFont = fontData ? '"Bodoni Moda", serif' : 'system-ui, sans-serif'
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#0d0d12',
+          color: '#d8ccb4',
+          fontFamily: 'system-ui, sans-serif',
+        }}
+      >
+        {/* Main title */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+        >
+          <div
+            style={{
+              fontSize: 72,
+              fontWeight: 900,
+              fontFamily: brandFont,
+              color: '#b89040',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}
+          >
+            CACHE CACHE
+          </div>
+          <div
+            style={{
+              fontSize: 96,
+              fontWeight: 900,
+              fontFamily: brandFont,
+              fontStyle: 'italic',
+              color: '#c43030',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+            }}
+          >
+            KILLER
+          </div>
+        </div>
+        {/* Tagline */}
+        <div
+          style={{
+            fontSize: 28,
+            color: '#d8ccb4',
+            marginTop: '24px',
+            opacity: 0.8,
+          }}
+        >
+          Survival Grandeur Nature — Le Cirque que le Temps a Oublie
+        </div>
+        {/* Bottom info */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '32px',
+            marginTop: '40px',
+            fontSize: 22,
+            color: '#b89040',
+          }}
+        >
+          <span>20 min/session</span>
+          <span style={{ display: 'flex' }}>•</span>
+          <span>2-10 joueurs</span>
+          <span style={{ display: 'flex' }}>•</span>
+          <span>Des 12€</span>
+        </div>
+      </div>
+    ),
+    { ...size, fonts },
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/app/reserver/opengraph-image.tsx
+=====================================
+import { ImageResponse } from 'next/og'
+
+export const runtime = 'edge'
+export const alt = 'Reservez votre session — Cache Cache Killer'
+export const size = { width: 1200, height: 630 }
+export const contentType = 'image/png'
+
+async function loadBodoniModa(): Promise<ArrayBuffer | null> {
+  try {
+    const css = await fetch(
+      'https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@900',
+      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NextJS/15)' } },
+    ).then((res) => res.text())
+
+    const match = css.match(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2)\)/)
+    if (!match?.[1]) return null
+
+    return await fetch(match[1]).then((res) => res.arrayBuffer())
+  } catch {
+    return null
+  }
+}
+
+export default async function Image() {
+  const fontData = await loadBodoniModa()
+
+  const fonts: NonNullable<ConstructorParameters<typeof ImageResponse>[1]>['fonts'] = fontData
+    ? [{ name: 'Bodoni Moda', data: fontData, weight: 900, style: 'normal' }]
+    : []
+
+  const brandFont = fontData ? '"Bodoni Moda", serif' : 'system-ui, sans-serif'
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#0d0d12',
+          color: '#d8ccb4',
+          fontFamily: 'system-ui, sans-serif',
+        }}
+      >
+        {/* Main heading */}
+        <div
+          style={{
+            fontSize: 64,
+            fontWeight: 900,
+            fontFamily: brandFont,
+            color: '#b89040',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          RESERVEZ VOTRE SESSION
+        </div>
+        {/* Subtitle */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: '24px',
+            gap: '4px',
+          }}
+        >
+          <div
+            style={{
+              fontSize: 36,
+              fontWeight: 900,
+              fontFamily: brandFont,
+              fontStyle: 'italic',
+              color: '#c43030',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Cache Cache Killer
+          </div>
+          <div
+            style={{
+              fontSize: 24,
+              color: '#d8ccb4',
+              opacity: 0.8,
+              marginTop: '8px',
+            }}
+          >
+            Survival Grandeur Nature
+          </div>
+        </div>
+        {/* Bottom info */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '32px',
+            marginTop: '48px',
+            fontSize: 22,
+            color: '#b89040',
+          }}
+        >
+          <span>20 min/session</span>
+          <span style={{ display: 'flex' }}>•</span>
+          <span>2-10 joueurs</span>
+          <span style={{ display: 'flex' }}>•</span>
+          <span>Des 12€</span>
+        </div>
+      </div>
+    ),
+    { ...size, fonts },
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/components/header.tsx
+=====================================
+'use client'
+
+import { useState, useCallback, useEffect } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Button, CckLogo } from '@cck/ui'
+
+const NAV_LINKS = [
+  { href: '/concept', label: "L'experience" },
+  { href: '/reserver', label: 'Reserver' },
+  { href: '/classement', label: 'Classement' },
+  { href: '/a-propos', label: 'A propos' },
+] as const
+
+/**
+ * SiteHeader — Sticky header with CckLogo, desktop nav and mobile hamburger menu.
+ * Rule 1: Hamburger 48x48px touch target.
+ * Rule 5: prefers-reduced-motion for transitions.
+ */
+export function SiteHeader() {
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+
+  const closeMobile = useCallback(() => setMobileOpen(false), [])
+
+  // Close mobile menu on route change
+  // Deferred to avoid synchronous setState in effect body (react-hooks/set-state-in-effect)
+  useEffect(() => {
+    const timer = setTimeout(() => setMobileOpen(false), 0)
+    return () => clearTimeout(timer)
+  }, [pathname])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
+
+  return (
+    <header className="sticky top-0 z-sticky border-b border-border-subtle bg-[var(--color-surface-warm)]/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="flex items-center focus-visible:focus-ring rounded-sm"
+          aria-label="Cache Cache Killer - Accueil"
+        >
+          <CckLogo variant="compact" size="sm" />
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Navigation principale">
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={true}
+                className={[
+                  'rounded-md px-3 py-2 text-sm font-heading font-medium transition-colors duration-150',
+                  'min-h-[48px] flex items-center', // Rule 1: 48px touch target
+                  'focus-visible:focus-ring',
+                  isActive
+                    ? 'text-text-accent bg-surface-raised'
+                    : 'text-text-primary hover:text-text-accent hover:bg-surface-raised-hover',
+                ].join(' ')}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
+
+          <Link href="/connexion" className="ml-2">
+            <Button variant="secondary" size="lg">
+              Connexion
+            </Button>
+          </Link>
+        </nav>
+
+        {/* Mobile hamburger — Rule 1: 48x48px min */}
+        <button
+          type="button"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          className="flex h-12 w-12 items-center justify-center rounded-md text-text-primary hover:bg-surface-raised-hover focus-visible:focus-ring md:hidden"
+          aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
+        >
+          {mobileOpen ? (
+            /* Close icon */
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            /* Hamburger icon */
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Mobile full-screen overlay nav */}
+      {mobileOpen && (
+        <div
+          id="mobile-nav"
+          className="fixed inset-0 top-16 z-overlay bg-surface-base/95 backdrop-blur-lg md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu de navigation"
+        >
+          <nav className="flex flex-col gap-2 px-4 py-6" aria-label="Navigation principale mobile">
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  prefetch={true}
+                  onClick={closeMobile}
+                  className={[
+                    'flex min-h-[48px] items-center rounded-lg px-4 py-3 font-heading text-lg font-medium transition-colors duration-150',
+                    'focus-visible:focus-ring',
+                    isActive
+                      ? 'text-text-accent bg-surface-raised'
+                      : 'text-text-primary hover:text-text-accent hover:bg-surface-raised-hover',
+                  ].join(' ')}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+
+            <div className="mt-4 border-t border-border-subtle pt-4">
+              <Link href="/connexion" onClick={closeMobile}>
+                <Button variant="primary" size="lg" className="w-full">
+                  Connexion
+                </Button>
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/components/footer.tsx
+=====================================
+import Link from 'next/link'
+import { CckLogo } from '@cck/ui'
+
+const NAV_LINKS = [
+  { href: '/concept', label: "L'experience" },
+  { href: '/reserver', label: 'Reserver' },
+  { href: '/classement', label: 'Classement' },
+  { href: '/a-propos', label: 'A propos' },
+] as const
+
+const LEGAL_LINKS = [
+  { href: '/mentions-legales', label: 'Mentions legales' },
+  { href: '/cgv', label: 'CGV' },
+  { href: '/mentions-legales#rgpd', label: 'Politique de confidentialite' },
+  { href: '/mentions-legales#cookies', label: 'Gestion des cookies' },
+] as const
+
+/**
+ * SiteFooter — Footer with CckLogo, nav columns, social links, copyright.
+ * Server component — no interactivity needed.
+ * Rule 25: EU-first — "Fait avec coeur en France".
+ */
+export function SiteFooter() {
+  return (
+    <footer className="border-t border-border-subtle bg-[var(--color-night-50)]" role="contentinfo">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          {/* Logo & tagline */}
+          <div className="flex flex-col gap-3 lg:col-span-2">
+            <Link
+              href="/"
+              className="inline-flex self-start focus-visible:focus-ring rounded-sm"
+              aria-label="Cache Cache Killer - Accueil"
+            >
+              <CckLogo variant="compact" size="sm" />
+            </Link>
+            <p className="text-sm text-text-secondary">
+              Le Cirque D&eacute;lav&eacute; — Survival grandeur nature. Une
+              exp&eacute;rience immersive unique.
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-text-accent">
+              Navigation
+            </h3>
+            <ul className="flex flex-col gap-2">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex min-h-[44px] items-center text-sm text-text-primary hover:text-text-accent transition-colors duration-150 focus-visible:focus-ring rounded-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Informations legales */}
+          <div>
+            <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-text-accent">
+              Informations legales
+            </h3>
+            <ul className="flex flex-col gap-2">
+              {LEGAL_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex min-h-[44px] items-center text-sm text-text-primary hover:text-text-accent transition-colors duration-150 focus-visible:focus-ring rounded-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Nous soutenir, Nous suivre & Contact */}
+          <div className="flex flex-col gap-6">
+            {/* Nous soutenir */}
+            <div>
+              <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-text-accent">
+                Nous soutenir
+              </h3>
+              <a
+                href="https://fr.ulule.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[44px] items-center text-sm text-text-primary hover:text-text-accent transition-colors duration-150 focus-visible:focus-ring rounded-sm"
+              >
+                Campagne Ulule &rarr;
+              </a>
+            </div>
+
+            {/* Nous suivre */}
+            <div>
+              <h3 className="mb-3 font-heading text-sm font-semibold uppercase tracking-wider text-text-accent">
+                Nous suivre
+              </h3>
+              <div className="flex gap-3">
+                <a
+                  href="https://instagram.com/cachecachekiller"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-12 w-12 items-center justify-center rounded-md text-text-secondary hover:text-text-accent hover:bg-surface-raised-hover transition-colors duration-150 focus-visible:focus-ring"
+                  aria-label="Instagram"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://tiktok.com/@cachecachekiller"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-12 w-12 items-center justify-center rounded-md text-text-secondary hover:text-text-accent hover:bg-surface-raised-hover transition-colors duration-150 focus-visible:focus-ring"
+                  aria-label="TikTok"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.51a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.47v-7.15a8.16 8.16 0 005.58 2.18v-3.44a4.85 4.85 0 01-3-.57v.01h3V6.69z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://facebook.com/cachecachekiller"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-12 w-12 items-center justify-center rounded-md text-text-secondary hover:text-text-accent hover:bg-surface-raised-hover transition-colors duration-150 focus-visible:focus-ring"
+                  aria-label="Facebook"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="flex items-center gap-2 text-sm text-text-primary">
+              <svg className="h-4 w-4 shrink-0 text-text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Essonne, &Icirc;le-de-France</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 flex flex-col items-center gap-2 border-t border-border-subtle pt-6 text-xs text-text-secondary sm:flex-row sm:justify-between">
+          <p>&copy; 2026 Cache Cache Killer. Tous droits reserves.</p>
+          <p>Fait avec <span aria-label="amour">&#10084;&#65039;</span> en France</p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/components/fade-in-section.tsx
+=====================================
+'use client'
+
+import { useFadeIn } from '@cck/hooks'
+
+/**
+ * Client wrapper for scroll-triggered fade-in.
+ * Use in server components that can't call hooks directly.
+ * Rule 5: respects prefers-reduced-motion via useFadeIn.
+ */
+export function FadeInSection({
+  children,
+  delay,
+  className,
+}: {
+  children: React.ReactNode
+  delay?: number
+  className?: string
+}) {
+  const { ref, style } = useFadeIn({ delay })
+
+  return (
+    <div ref={ref} style={style} className={className}>
+      {children}
+    </div>
+  )
+}
+
+
+=====================================
+FILE: apps/site/src/middleware.ts
+=====================================
+/**
+ * Next.js Middleware — @cck/site (public website)
+ * Rule 13: CSP nonce — scripts inline via nonce, never unsafe-inline.
+ * Phase 2: Supabase session refresh for logged-in visitors (site is mostly public).
+ */
+import type { NextRequest, NextResponse } from 'next/server'
+import { withCspNonce } from '@cck/config/middleware/csp'
+import { createMiddlewareClient } from '@cck/config/supabase/middleware'
+
+export async function middleware(request: NextRequest): Promise<NextResponse> {
+  // Step 1: Apply CSP nonce (Rule 13)
+  const cspResponse = withCspNonce(request, {
+    extraScriptSrc: ['https://plausible.io'],
+    extraConnectSrc: ['https://plausible.io'],
+  })
+
+  // Step 2: Refresh Supabase auth session if user is logged in
+  // Site is public — no redirect, just keep the session alive
+  const { supabase } = createMiddlewareClient(request, cspResponse)
+  await supabase.auth.getUser()
+
+  return cspResponse
+}
+
+/**
+ * Matcher config inlined for static analysis by Next.js.
+ * Source: @cck/config/middleware/csp — cspMatcherConfig
+ */
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$|api/).*)',
+  ],
+}
+
+
